@@ -54,15 +54,17 @@
     </div>
     <div class="card-body">
       <div class="row">
-        <div class="col-lg-4">
-          <div class="card shadow mb-4" *ngIf="courseTurns.length > 0">
-            <div *ngFor="let item of courseTurns" class="card-body">
-              {{item.days | uppercase}}, {{item.turn.name}} de {{item.start_hour}} a {{item.end_hour}}
+        <ng-container *ngIf="courseTurns.length > 0">
+          <div *ngFor="let item of courseTurns" class="col-lg-4">
+            <div class="card shadow mb-4">
+              <div class="card-body">
+                {{item.days | uppercase}}, {{item.turn.name}} de {{item.start_hour}} a {{item.end_hour}}
+              </div>
             </div>
           </div>
-          <div class="card shadow mb-4" *ngIf="courseTurns.length == 0">
-            <span>El curso no tiene turnos asignados</span>
-          </div>
+        </ng-container>
+        <div class="card shadow mb-4" *ngIf="courseTurns.length == 0">
+          <span>El curso no tiene turnos asignados</span>
         </div>
       </div>
     </div>
