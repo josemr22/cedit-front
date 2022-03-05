@@ -1,0 +1,12 @@
+<form>
+  <div class="mb-3">
+    <label for="exampleInputText" class="form-label">Descripcion</label>
+    <input #name type="text" class="form-control">
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputText" class="form-label">Número de días para
+      cobro de mensualidades</label>
+    <input #days type="number" class="form-control">
+  </div>
+  <button type="button" (click)="save()" class="btn btn-primary">Guardar</button>
+</form>

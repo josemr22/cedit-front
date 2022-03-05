@@ -1,0 +1,70 @@
+<form (submit)="save()" [formGroup]="form">
+  <div class="mb-3">
+    <label for="exampleInputText" class="form-label">Curso</label>
+    <div class="row">
+      <div class="col-12">
+        <app-select-course (onSelectCourse)="onSelectCourse($event)"></app-select-course>
+        <span *ngIf="isInvalid('course_id')" class="text-danger">Seleccione Curso</span>
+      </div>
+      <!-- <div class="col-3">
+        <button type="submit" class="btn btn-info">Ver
+          turnos</button>
+      </div> -->
+    </div>
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputText" class="form-label">Días</label>
+    <input type="text" formControlName="days" class="form-control" id="exampleInputText">
+    <span *ngIf="isInvalid('days')" class="text-danger">El campo es requerido</span>
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputText" class="form-label">Turno</label>
+    <select formControlName="turn_id" class="form-select aria-label=">
+      <option *ngFor="let item of turns" [value]="item.id">{{item.name}}</option>
+    </select>
+    <span *ngIf="isInvalid('turn_id')" class="text-danger">Seleccione turno</span>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <div class="mb-3">
+        <label for="exampleInputText" class="form-label">Hora
+          Inicio</label>
+        <input formControlName="start_hour" type="time" class="form-control" id="exampleInputText">
+        <span *ngIf="isInvalid('start_hour')" class="text-danger">El campo es requerido</span>
+
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="mb-3">
+        <label for="exampleInputText" class="form-label">Hora
+          Fin</label>
+        <input formControlName="end_hour" type="time" class="form-control" id="exampleInputText">
+        <span *ngIf="isInvalid('end_hour')" class="text-danger">El campo es requerido</span>
+      </div>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Guardar</button>
+</form>
+<div class="mt-4 col-lg-12" *ngIf="form.get('course_id')?.valid">
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Turnos Creados
+      </h6>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card shadow mb-4" *ngIf="courseTurns.length > 0">
+            <div *ngFor="let item of courseTurns" class="card-body">
+              {{item.days | uppercase}}, {{item.turn.name}} de {{item.start_hour}} a {{item.end_hour}}
+            </div>
+          </div>
+          <div class="card shadow mb-4" *ngIf="courseTurns.length == 0">
+            <span>El curso no tiene turnos asignados</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

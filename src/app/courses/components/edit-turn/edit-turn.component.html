@@ -1,0 +1,64 @@
+<div class="mb-3">
+  <label for="exampleInputText" class="form-label">Turnos a
+    editar</label>
+  <div class="row mb-3">
+    <div class="col-12">
+      <app-select-course (onSelectCourse)="onSelectCourse($event)" [courses]="courses"></app-select-course>
+    </div>
+    <!-- <div class="col-3">
+      <button type="submit" class="btn btn-warning">Ver
+        turnos</button>
+    </div> -->
+  </div>
+  <div class="mt-4 col-lg-12" *ngIf="courseTurns.length > 0">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Turnos
+          Creados
+        </h6>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-6" *ngFor="let ct of courseTurns">
+            <div class="card shadow mb-4">
+              <div class="card-body">
+                <div class="mb-3">
+                  <input type="text" class="form-control" [name]="'days'+ct.id" [(ngModel)]="ct.days">
+                </div>
+                <div class="mb-3">
+                  <select class="form-select" [name]="'turn'+ct.id" [(ngModel)]="ct.turn_id">
+                    <option *ngFor="let item of turns" value="{{item.id}}">{{item.name}}
+                    </option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <div class="row">
+                    <div class="col-2 text-right">
+                      De:
+                    </div>
+                    <div class="col-10">
+                      <input type="time" class="form-control" [name]="'start_hour'+ct.id" [(ngModel)]="ct.start_hour">
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div class="row">
+                    <div class="col-2 text-right">
+                      A:
+                    </div>
+                    <div class="col-10">
+                      <input type="time" class="form-control" [name]="'end_hour'+ct.id" [(ngModel)]="ct.end_hour">
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <button type="button" (click)="save(ct.id)" class="btn btn-primary">Actualizar</button>
+                  <button type="button" class="btn btn-danger" (click)="delete(ct.id)">Eliminar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

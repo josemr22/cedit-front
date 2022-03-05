@@ -1,0 +1,14 @@
+<div class="mb-3">
+  <label for="exampleInputText" class="form-label">Curso a
+    editar</label>
+  <div class="row mb-3">
+    <div class="col-9">
+      <app-select-course [courses]="courses" (onSelectCourse)="onSelectCourse($event)"></app-select-course>
+    </div>
+    <div class="col-3">
+      <button [disabled]="!course" type="button" (click)="delete()" class="btn btn-danger">Eliminar
+        curso</button>
+    </div>
+  </div>
+  <app-form-course [course]="course" (onSubmit)="save($event)"></app-form-course>
+</div>
