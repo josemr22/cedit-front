@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import Swal from 'sweetalert2';
 import { Course } from '../../interfaces/course.interface';
 import { CoursesService } from '../../services/courses.service';
 import { FormCourseData } from '../form-course/form-course.component';
@@ -28,7 +29,7 @@ export class CreateCourseComponent implements OnInit {
         created_at: '',
         updated_at: '',
       };
-      alert('Curso creado');
+      Swal.fire('Bien Hecho!', 'Curso Creado!', 'success');
     });
   }
 }

@@ -3,6 +3,7 @@ import { Course } from '../../interfaces/course.interface';
 import { CoursesService } from '../../services/courses.service';
 import { CourseTurn } from '../../interfaces/course-turn.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-create-turn',
@@ -62,7 +63,7 @@ export class CreateTurnComponent implements OnInit {
         turn_id: '1',
         course_id: this.form.get('course_id')?.value,
       });
-      alert('Turno creado correctamente');
+      Swal.fire('Bien Hecho!', 'Turno creado correctamente!', 'success');
     });
     console.log('guardando');
   }

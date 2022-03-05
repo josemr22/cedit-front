@@ -25,6 +25,7 @@
     "primeicons": "^5.0.0",
     "primeng": "^13.2.1",
     "rxjs": "~6.6.0",
+    "sweetalert2": "^11.4.4",
     "tslib": "^2.3.0",
     "xlsx": "^0.18.3",
     "zone.js": "~0.11.4"

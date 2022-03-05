@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CoursesService } from '../../services/courses.service';
 import { CourseTurn } from '../../interfaces/course-turn.interface';
 import { Course } from '../../interfaces/course.interface';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-edit-turn',
@@ -48,7 +49,7 @@ export class EditTurnComponent implements OnInit {
     this.courseService
       .updateTurn(id, { turn_id, days, start_hour, end_hour })
       .subscribe((ct) => {
-        alert('Actualizado correctamente');
+        Swal.fire('Bien Hecho!', `Actualizado correctamente`, 'success');
         this.courseTurns = ct;
       });
   }
@@ -57,7 +58,7 @@ export class EditTurnComponent implements OnInit {
     this.courseService.deleteTurn(id).subscribe((_) => {
       const idx = this.courseTurns.findIndex((c) => c.id == id);
       this.courseTurns.splice(idx, 1);
-      alert('Eliimnado Correctamente');
+      Swal.fire('Bien Hecho!', `Elimnado Correctamente`, 'success');
     });
   }
 }

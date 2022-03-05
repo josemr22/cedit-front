@@ -10,6 +10,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Course } from '../../interfaces/course.interface';
+import Swal from 'sweetalert2';
 
 export type FormCourseData = {
   name: string;
@@ -58,11 +59,11 @@ export class FormCourseComponent implements OnInit {
     const days = this.daysInput.nativeElement.value;
 
     if (!name) {
-      alert('Ingrese la descripción');
+      Swal.fire('Bien Hecho!', `Ingrese la descripción`, 'error');
       return;
     }
     if (!days) {
-      alert('Ingrese el número de días');
+      Swal.fire('Bien Hecho!', `Ingrese el número de días`, 'error');
       return;
     }
 

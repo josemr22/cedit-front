@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import Swal from 'sweetalert2';
 import { Course } from '../../interfaces/course.interface';
 import { CoursesService } from '../../services/courses.service';
 import { FormCourseData } from '../form-course/form-course.component';
@@ -23,7 +24,7 @@ export class EditCourseComponent implements OnInit {
 
   save(formData: FormCourseData) {
     if (!this.course) {
-      alert('Seleccione Curso');
+      Swal.fire('Bien Hecho!', 'Seleccione Curso', 'error');
       return;
     }
     const { id, name, days } = { ...formData, id: this.course!.id };
@@ -32,7 +33,11 @@ export class EditCourseComponent implements OnInit {
       this.courses[idx] = c;
       this.courses = [...this.courses];
       this.course = null;
-      alert(`Se ha editado correctamente el curso: ${c.name}`);
+      Swal.fire(
+        'Bien Hecho!',
+        `Se ha editado correctamente el curso: ${c.name}`,
+        'success'
+      );
     });
   }
 
@@ -44,7 +49,7 @@ export class EditCourseComponent implements OnInit {
       const idx = this.courses.findIndex((c) => c.id == this.course!.id);
       this.courses.splice(idx, 1);
       this.courses = [...this.courses];
-      alert('Curso Eliminado Correctamente');
+      Swal.fire('Bien Hecho!', `Curso Eliminado Correctamente`, 'success');
     });
   }
 
