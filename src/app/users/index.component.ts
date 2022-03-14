@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { User } from './interfaces/user.interface';
 import { UsersService } from './services/users.service';
 import * as FileSaver from 'file-saver';
@@ -9,6 +9,8 @@ import * as FileSaver from 'file-saver';
   styleUrls: ['./index.component.css'],
 })
 export class IndexComponent implements OnInit {
+  @ViewChild('dt') dt!: ElementRef;
+
   _users: User[] = [];
   cols!: any[];
   exportColumns!: any[];
@@ -32,18 +34,12 @@ export class IndexComponent implements OnInit {
   }
 
   get users() {
-    console.log(this._users);
     return this._users.map((user) => ({
       id: user.id,
       name: user.name,
       email: user.email,
       role: user.roles[0]?.name,
     }));
-  }
-
-  edit(id: number) {
-    console.log(id);
-    console.log(typeof id);
   }
 
   delete(id: number) {

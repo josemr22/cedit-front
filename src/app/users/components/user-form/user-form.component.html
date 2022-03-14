@@ -1,0 +1,33 @@
+<h1>{{!userId ? 'Crear' : 'Editar'}} Usuario</h1>
+<form (ngSubmit)="save()" [formGroup]="form">
+  <div>
+    <label>Nombre</label>
+    <input formControlName="name" type="text" class="form-control">
+    <span *ngIf="isInvalid('name')" class="text-danger text-form">El campo es requerido</span>
+  </div>
+  <div>
+    <label>Email</label>
+    <input formControlName="email" type="text" class="form-control">
+    <span *ngIf="isInvalid('email')" class="text-danger text-form">El campo es requerido</span>
+  </div>
+  <div>
+    <label>Rol</label>
+    <select formControlName="role" class="form-control">
+      <option *ngFor="let item of roles" [value]="item.name">{{item.name}}</option>
+    </select>
+    <span *ngIf="isInvalid('role')" class="text-danger text-form">El campo es requerido</span>
+  </div>
+  <!-- <div>
+    <label>Usuario</label>
+    <input type="text" class="form-control">
+  </div> -->
+  <div>
+    <label>Contraseña</label>
+    <input formControlName="password" type="password" class="form-control">
+    <span *ngIf="isInvalid('password')" class="text-danger text-form">Ingrese al menos 6 caracteres</span>
+  </div>
+  <div>
+    <button type="submit" class="btn btn-primary">{{!userId ? 'Guardar' : 'Actualizar'}}</button>
+    <a routerLink="/usuarios" class="btn btn-primary">volver</a>
+  </div>
+</form>

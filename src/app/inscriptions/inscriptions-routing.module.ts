@@ -1,27 +1,21 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { IndexComponent } from './index.component';
 import { MainLayoutComponent } from '../shared/main-layout/main-layout.component';
-import { UserFormComponent } from './components/user-form/user-form.component';
+import { IndexComponent } from './index.component';
+import { InscriptionFormComponent } from './components/inscription-form/inscription-form.component';
 
 const routes: Routes = [
   {
-    path: 'usuarios',
+    path: 'preinscripcion',
     component: MainLayoutComponent,
     children: [
       {
         path: '',
         component: IndexComponent,
-        pathMatch: 'full',
       },
       {
-        path: ':id',
-        component: UserFormComponent,
-        pathMatch: 'full',
-      },
-      {
-        path: '**',
-        redirectTo: '',
+        path: 'nuevo',
+        component: InscriptionFormComponent,
       },
     ],
   },
@@ -31,4 +25,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class UsersRoutingModule {}
+export class InscriptionsRoutingModule {}

@@ -1,0 +1,30 @@
+ <!-- Page Heading -->
+ <h1 class="h3 mb-4 text-gray-800">Alumnos</h1>
+ <div class="container">
+   <div class="col-lg-12 border-bottom-primary">
+     <div class="card shadow mb-4">
+       <div class="card-body">
+         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+           <li class="nav-item" role="presentation">
+             <button routerLink="/alumnos/lista" routerLinkActive="active" class="nav-link" id="pills-home-tab"
+               data-bs-toggle="pill" data-bs-target="#tabAlumnos" type="button" role="tab" aria-controls="tabAlumnos"
+               aria-selected="true">Alumnos</button>
+           </li>
+           <li class="nav-item" role="presentation">
+             <button routerLink="/alumnos/pagos" routerLinkActive="active" class="nav-link" id="infoPagos-tab"
+               data-bs-toggle="pill" data-bs-target="#infoPagos" type="button" role="tab" aria-controls="infoPagos"
+               aria-selected="false">Información de
+               Pagos</button>
+           </li>
+           <li class="nav-item" role="presentation">
+             <button class="nav-link" id="buscarOp-tab" data-bs-toggle="pill" data-bs-target="#buscarOp" type="button"
+               role="tab" aria-controls="buscarOp" aria-selected="false">Buscar por número de
+               operación</button>
+           </li>
+         </ul>
+         <div class="tab-content" id="pills-tabContent"></div>
+         <router-outlet></router-outlet>
+       </div>
+     </div>
+   </div>
+ </div>

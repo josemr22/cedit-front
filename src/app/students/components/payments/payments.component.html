@@ -1,0 +1,126 @@
+<div class="tab-pane">
+  <div class="row">
+    <div class="input-group mb-1">
+      <span class="input-group-text" id="inputGroup-sizing-default">Buscar
+        Alumno</span>
+      <p-autoComplete (onSelect)="onSelectStudent($event)" [showEmptyMessage]="true" [suggestions]="filteredStudents"
+        (completeMethod)="filterStudent($event)" field="name" [minLength]="1">
+      </p-autoComplete>
+    </div>
+  </div>
+  <hr>
+  <div class="row container">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Información
+        </h6>
+      </div>
+      <div class="card-body">
+        <div class="d-flex justify-content-end">
+          <button *ngIf="noEdit && selectedStudent" type="button" (click)="noEdit = null"
+            class="btn btn-primary">Editar</button>
+          <button *ngIf="!noEdit" type="button" (click)="cancel()" class="btn btn-warning">Cancelar</button>
+        </div>
+        <form (ngSubmit)="save()" [formGroup]="form">
+          <div class="row">
+            <div class="col-6">
+              <div class="mb-3">
+                <label for="" class="form-label">Nombre*</label>
+                <input [attr.disabled]="noEdit" formControlName="name" type="text" class="form-control">
+                <span *ngIf="isInvalid('name')" class="text-danger form-text">El campo es obligatorio</span>
+              </div>
+              <div class="mb-3">
+                <label for="" class="form-label">DNI*</label>
+                <input [attr.disabled]="noEdit" formControlName="dni" type="number" class="form-control">
+                <span *ngIf="isInvalid('dni')" class="text-danger form-text">El campo es obligatorio</span>
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Email*</label>
+                <input [attr.disabled]="noEdit" formControlName="email" type="email" class="form-control">
+                <span *ngIf="isInvalid('email')" class="text-danger form-text">El campo es obligatorio</span>
+              </div>
+              <div class="mb-3">
+                <label for="" class="form-label">Departamento*</label>
+                <select [attr.disabled]="noEdit" formControlName="department_id" class="form-control"
+                  aria-label="Default select example">
+                  <option *ngFor="let item of departments" [value]="item.id">{{item.name}}</option>
+                </select>
+                <span *ngIf="isInvalid('department_id')" class="text-danger form-text">El campo es obligatorio</span>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="mb-3">
+                <label for="" class="form-label">Dirección*</label>
+                <input [attr.disabled]="noEdit" formControlName="address" type="text" class="form-control">
+                <span *ngIf="isInvalid('address')" class="text-danger form-text">El campo es obligatorio</span>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="" class="form-label">Teléfono</label>
+                    <input [attr.disabled]="noEdit" formControlName="phone" type="number" class="form-control">
+                    <span *ngIf="isInvalid('phone')" class="text-danger form-text">El campo es obligatorio</span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="" class="form-label">Celular*</label>
+                    <input [attr.disabled]="noEdit" formControlName="cellphone" type="number" class="form-control">
+                    <span *ngIf="isInvalid('cellphone')" class="text-danger form-text">El campo es obligatorio</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="" class="form-label">Curso</label>
+                <select [attr.disabled]="noEdit" formControlName="course_id" class="form-control"
+                  aria-label="Default select example">
+                  <option *ngFor="let item of courses" [value]="item.id">{{item.name}}</option>
+                </select>
+                <span *ngIf="isInvalid('course_id')" class="text-danger form-text">El campo es obligatorio</span>
+              </div>
+              <div class="mb-3">
+                <label for="" class="form-label">Turno</label>
+                <select [attr.disabled]="noEdit" formControlName="course_turn_id" class="form-control"
+                  aria-label="Default select example">
+                  <option *ngFor="let item of courseTurns" [value]="item.id">
+                    {{item.days + ', ' + item.turn.name + ' de ' + item.start_hour + ' a ' + item.end_hour}}</option>
+                </select>
+                <span *ngIf="isInvalid('course_turn_id')" class="text-danger form-text">El campo es obligatorio</span>
+              </div>
+              <div class="mb-3">
+                <div class="row">
+                  <div class="col-9">
+                    <label for="" class="form-label">Fecha
+                      Inicio</label>
+                    <input [attr.disabled]="noEdit" formControlName="start_date" type="date" class="form-control">
+                    <span *ngIf="isInvalid('start_date')" class="text-danger form-text">El campo es obligatorio</span>
+                  </div>
+                  <div class="col-3"
+                    style="display: flex;flex-direction: column;flex-wrap: nowrap;justify-content: flex-end;">
+                    <button *ngIf="!noEdit" type="submit" class="btn btn-primary">Actualizar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="mt-4 col-lg-12">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Pagos
+        </h6>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div>
+            Insertar Tabla
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

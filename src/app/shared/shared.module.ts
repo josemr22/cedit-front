@@ -8,10 +8,11 @@ import { RouterModule } from '@angular/router';
 
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
+import {AutoCompleteModule} from 'primeng/autocomplete';
 
 @NgModule({
   declarations: [SidebarComponent, LoginComponent, MainLayoutComponent],
   imports: [CommonModule, RouterModule, TableModule, BrowserAnimationsModule],
-  exports: [SidebarComponent, TableModule, ButtonModule],
+  exports: [SidebarComponent, TableModule, ButtonModule, AutoCompleteModule],
 })
 export class SharedModule {}

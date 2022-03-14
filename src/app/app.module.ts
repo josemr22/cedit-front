@@ -9,6 +9,8 @@ import { SharedModule } from './shared/shared.module';
 import { CoursesModule } from './courses/courses.module';
 import { CoursesRoutingModule } from './courses/courses-routing.module';
 import { HttpClientModule } from '@angular/common/http';
+import { StudentsModule } from './students/students.module';
+import { InscriptionsModule } from './inscriptions/inscriptions.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,6 +23,8 @@ import { HttpClientModule } from '@angular/common/http';
     CoursesRoutingModule,
     SharedModule,
     HttpClientModule,
+    StudentsModule,
+    InscriptionsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

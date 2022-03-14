@@ -10,21 +10,32 @@
        <p-table #dt [columns]="cols" [paginator]="true" [value]="users" responsiveLayout="scroll" dataKey="id"
          [exportHeader]="'customExportHeader'" [rowsPerPageOptions]="[10,25,50]" [rows]="10">
          <ng-template pTemplate="caption">
-           <div class="flex">
-             <button type="button" pButton pRipple icon="pi pi-file" (click)="dt.exportCSV()" class="mr-2"
-               pTooltip="CSV" tooltipPosition="bottom"></button>
-             <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
-               class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
-             <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()"
-               class="p-button-warning mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
-             <!-- <button type="button" pButton pRipple icon="pi pi-filter" (click)="dt.exportCSV({selectionOnly:true})"
-               class="p-button-info ml-auto" pTooltip="Selection Only" tooltipPosition="bottom"></button> -->
+           <div class="d-flex justify-content-between">
+             <a routerLink="/usuarios/nuevo" href="#" class="btn btn-primary">+</a>
+             <div>
+               <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+                 class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
+               <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()"
+                 class="p-button-warning mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
+               <!-- <button type="button" pButton pRipple icon="pi pi-filter" (click)="dt.exportCSV({selectionOnly:true})"
+              class="p-button-info ml-auto" pTooltip="Selection Only" tooltipPosition="bottom"></button> -->
+             </div>
+           </div>
+           <div class="table-header mt-3 d-flex justify-content-end">
+             <input pInputText type="text" (input)="dt.filterGlobal($any($event.target!).value, 'contains')"
+               placeholder="Buscar..." />
            </div>
          </ng-template>
          <ng-template pTemplate="header" let-columns>
            <tr>
-             <th *ngFor="let col of columns">
+             <!-- <th *ngFor="let col of columns">
                {{col.header}}
+             </th> -->
+             <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+               <div class="flex justify-content-between align-items-center">
+                 {{col.header}}
+                 <p-sortIcon [field]="col.field"></p-sortIcon>
+               </div>
              </th>
              <th>
                Acciones
@@ -37,7 +48,7 @@
                {{rowData[col.field]}}
              </td>
              <td>
-               <button (click)="edit(rowData.id)" pButton type="button" icon="pi pi-pencil"
+               <button [routerLink]="['/usuarios', rowData.id]" pButton type="button" icon="pi pi-pencil"
                  class="p-button-sm mr-1"></button>
                <button (click)="delete(rowData.id)" pButton type="button" icon="pi pi-trash"
                  class="p-button-sm p-button-danger"></button>
