@@ -5,10 +5,10 @@ import { SharedService } from '../../../shared/services/shared.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { StudentsService } from '../../services/students.service';
 import { HttpParams } from '@angular/common/http';
-import { Student } from '../../interfaces/student.interface';
 import { switchMap } from 'rxjs/operators';
 import * as FileSaver from 'file-saver';
 import Swal from 'sweetalert2';
+import { StudentWithCourse } from '../../interfaces/student-with-course.interface';
 
 @Component({
   selector: 'app-students-list',
@@ -18,7 +18,7 @@ import Swal from 'sweetalert2';
 export class StudentsListComponent implements OnInit {
   courses: Course[] = [];
   enrolledYears: number[] = [];
-  _students: Student[] = [];
+  _students: StudentWithCourse[] = [];
 
   cols!: any[];
   exportColumns!: any[];
@@ -71,16 +71,16 @@ export class StudentsListComponent implements OnInit {
   }
 
   get students() {
-    return this._students.map((s) => ({
-      id: s.id,
-      dni: s.dni,
-      name: s.name,
-      course: s.course.name,
-      turn: `${s.course_turn.days} - ${s.course_turn.turn.name}`,
-      hours: `${s.course_turn.start_hour} - ${s.course_turn.end_hour}`,
-      enrolled_date: s.enrolled_at,
-      start_date: s.start_date,
-      enrolled_by: s.enrolled_by.name,
+    return this._students.map((swc) => ({
+      id: swc.id,
+      name: swc.student.name,
+      dni: swc.student.dni,
+      course: swc.course_turn.course.name,
+      turn: `${swc.course_turn.days} - ${swc.course_turn.turn.name}`,
+      hours: `${swc.course_turn.start_hour} - ${swc.course_turn.end_hour}`,
+      enrolled_date: swc.created_at,
+      start_date: swc.start_date,
+      enrolled_by: swc.matriculator.name,
     }));
   }
 
@@ -88,9 +88,8 @@ export class StudentsListComponent implements OnInit {
     const params: HttpParams = new HttpParams({
       fromObject: this.filters.value,
     });
-    console.log(params);
     this.studentService
-      .getStudents(params)
+      .getStudentsWithCourse(params)
       .subscribe((students) => (this._students = students));
   }
 
@@ -109,6 +108,7 @@ export class StudentsListComponent implements OnInit {
   }
 
   exportExcel() {
+    console.log('hola');
     import('xlsx').then((xlsx) => {
       const data = this.students.map((u) => {
         const { id, ...rest } = u;

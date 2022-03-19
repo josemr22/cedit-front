@@ -4,7 +4,7 @@
       <span class="input-group-text" id="inputGroup-sizing-default">Buscar
         Alumno</span>
       <p-autoComplete (onSelect)="onSelectStudent($event)" [showEmptyMessage]="true" [suggestions]="filteredStudents"
-        (completeMethod)="filterStudent($event)" field="name" [minLength]="1">
+        (completeMethod)="filterStudent($event)" field="label" [minLength]="1">
       </p-autoComplete>
     </div>
   </div>
@@ -17,7 +17,7 @@
       </div>
       <div class="card-body">
         <div class="d-flex justify-content-end">
-          <button *ngIf="noEdit && selectedStudent" type="button" (click)="noEdit = null"
+          <button *ngIf="noEdit && selectedStudentWithCourse" type="button" (click)="noEdit = null"
             class="btn btn-primary">Editar</button>
           <button *ngIf="!noEdit" type="button" (click)="cancel()" class="btn btn-warning">Cancelar</button>
         </div>
@@ -46,6 +46,11 @@
                   <option *ngFor="let item of departments" [value]="item.id">{{item.name}}</option>
                 </select>
                 <span *ngIf="isInvalid('department_id')" class="text-danger form-text">El campo es obligatorio</span>
+              </div>
+              <div class="mb-3">
+                <label for="" class="form-label">Fecha de Nacimiento*</label>
+                <input [attr.disabled]="noEdit" formControlName="date_of_birth" type="date" class="form-control">
+                <span *ngIf="isInvalid('date_of_birth')" class="text-danger form-text">El campo es obligatorio</span>
               </div>
             </div>
             <div class="col-6">
@@ -116,8 +121,10 @@
       </div>
       <div class="card-body">
         <div class="row">
-          <div>
-            Insertar Tabla
+          <app-payments-table *ngIf="selectedStudentWithCourse" [studentWithCourseId]="selectedStudentWithCourse!.id">
+          </app-payments-table>
+          <div *ngIf="!selectedStudentWithCourse">
+            Seleccione un alumno para ver sus pagos
           </div>
         </div>
       </div>

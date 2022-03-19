@@ -9,34 +9,28 @@ import { EditTurnComponent } from './components/edit-turn/edit-turn.component';
 
 const routes: Routes = [
   {
-    path: 'cursos',
-    component: MainLayoutComponent,
+    path: '',
+    component: IndexComponent,
     children: [
       {
-        path: '',
-        component: IndexComponent,
-        children: [
-          {
-            path: 'crear-curso',
-            component: CreateCourseComponent,
-          },
-          {
-            path: 'editar-curso',
-            component: EditCourseComponent,
-          },
-          {
-            path: 'crear-turno',
-            component: CreateTurnComponent,
-          },
-          {
-            path: 'editar-turno',
-            component: EditTurnComponent,
-          },
-          {
-            path: '**',
-            redirectTo: 'crear-curso',
-          },
-        ],
+        path: 'crear-curso',
+        component: CreateCourseComponent,
+      },
+      {
+        path: 'editar-curso',
+        component: EditCourseComponent,
+      },
+      {
+        path: 'crear-turno',
+        component: CreateTurnComponent,
+      },
+      {
+        path: 'editar-turno',
+        component: EditTurnComponent,
+      },
+      {
+        path: '**',
+        redirectTo: 'crear-curso',
       },
     ],
   },

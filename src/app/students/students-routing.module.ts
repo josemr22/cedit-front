@@ -7,26 +7,20 @@ import { PaymentsComponent } from './components/payments/payments.component';
 
 const routes: Routes = [
   {
-    path: 'alumnos',
-    component: MainLayoutComponent,
+    path: '',
+    component: IndexComponent,
     children: [
       {
-        path: '',
-        component: IndexComponent,
-        children: [
-          {
-            path: 'lista',
-            component: StudentsListComponent,
-          },
-          {
-            path: 'pagos',
-            component: PaymentsComponent,
-          },
-          {
-            path: '**',
-            redirectTo: 'lista',
-          },
-        ],
+        path: 'lista',
+        component: StudentsListComponent,
+      },
+      {
+        path: 'pagos',
+        component: PaymentsComponent,
+      },
+      {
+        path: '**',
+        redirectTo: 'lista',
       },
     ],
   },

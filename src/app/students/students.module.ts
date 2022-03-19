@@ -7,15 +7,10 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { IndexComponent } from './index.component';
 import { StudentsListComponent } from './components/students-list/students-list.component';
 import { PaymentsComponent } from './components/payments/payments.component';
-import { InformsComponent } from './informs.component';
+import { PaymentsTableComponent } from './components/payments-table/payments-table.component';
 
 @NgModule({
-  declarations: [
-    IndexComponent,
-    StudentsListComponent,
-    PaymentsComponent,
-    InformsComponent,
-  ],
+  declarations: [IndexComponent, StudentsListComponent, PaymentsComponent, PaymentsTableComponent],
   imports: [
     CommonModule,
     StudentsRoutingModule,

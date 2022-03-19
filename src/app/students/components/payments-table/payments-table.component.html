@@ -1,0 +1,30 @@
+<p-table #dt [columns]="cols" [paginator]="true" [value]="data" responsiveLayout="scroll" dataKey="id"
+  [exportHeader]="'customExportHeader'" [rowsPerPageOptions]="[10,25,50]" [rows]="10">
+  <ng-template pTemplate="caption">
+    <div class="table-header mt-3 d-flex justify-content-end">
+      <input pInputText type="text" (input)="dt.filterGlobal($any($event.target!).value, 'contains')"
+        placeholder="Buscar..." />
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <!-- <th *ngFor="let col of columns">
+      {{col.header}}
+    </th> -->
+      <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+        <div class="flex justify-content-between align-items-center">
+          {{col.header}}
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+        </div>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowData let-columns="columns">
+    <tr [pSelectableRow]="rowData">
+      <td *ngFor="let col of columns">
+        {{rowData[col.field]}}
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+<pre>{{payment | json}}</pre>
