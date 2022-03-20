@@ -4,6 +4,7 @@ import { MainLayoutComponent } from '../shared/main-layout/main-layout.component
 import { IndexComponent } from './index.component';
 import { StudentsListComponent } from './components/students-list/students-list.component';
 import { PaymentsComponent } from './components/payments/payments.component';
+import { OperationsComponent } from './components/operations/operations.component';
 
 const routes: Routes = [
   {
@@ -15,8 +16,12 @@ const routes: Routes = [
         component: StudentsListComponent,
       },
       {
-        path: 'pagos',
+        path: 'pagos/:id',
         component: PaymentsComponent,
+      },
+      {
+        path: 'operaciones',
+        component: OperationsComponent,
       },
       {
         path: '**',

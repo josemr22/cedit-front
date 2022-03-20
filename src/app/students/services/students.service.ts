@@ -6,6 +6,7 @@ import { Student } from '../interfaces/student.interface';
 import { EnrollStudentDto } from '../interfaces/enroll-student-dto.interface';
 import { StudentDto } from '../interfaces/student-dto.interface';
 import { Payment } from '../interfaces/payment.interface';
+import { Operation } from '../interfaces/operation.interface';
 
 const apiUrl = environment.apiUrl;
 
@@ -49,9 +50,21 @@ export class StudentsService {
     );
   }
 
+  getStudentWithCourse(id: number) {
+    return this.http.get<StudentWithCourse>(
+      `${apiUrl}/students-with-course/${id}`
+    );
+  }
+
   getPayment(courseTurnStudentId: number) {
     return this.http.get<Payment>(
       `${apiUrl}/students/payment/${courseTurnStudentId}`
+    );
+  }
+
+  getOperation(operation: string, bank_id: number) {
+    return this.http.get<Operation[]>(
+      `${apiUrl}/students/operation/${operation}/${bank_id}`
     );
   }
 

@@ -1,0 +1,51 @@
+<form (ngSubmit)="search()">
+  <div class="row">
+    <div class="mb-3 col-5">
+      <label for="exampleInputText" class="form-label">Banco</label>
+      <select (change)="changeBank($event)" class="form-control">
+        <option *ngFor="let item of banks" [value]="item.id">{{item.name}}</option>
+      </select>
+    </div>
+    <div class="mb-3 col-5">
+      <label for="exampleInputText" class="form-label">Número de operación</label>
+      <input (keyup)="changeOperation($event)" type="number" class="form-control">
+    </div>
+    <div class="col-2">
+      <button type="submit" class="btn btn-primary">Buscar</button>
+    </div>
+  </div>
+</form>
+
+<div class="container">
+  <p-table #dt [columns]="cols" [value]="data" responsiveLayout="scroll" dataKey="id"
+    [exportHeader]="'customExportHeader'">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <!-- <th *ngFor="let col of columns">
+      {{col.header}}
+    </th> -->
+        <th *ngFor="let col of columns">
+          <div class="flex justify-content-between align-items-center">
+            {{col.header}}
+          </div>
+        </th>
+        <th>
+          <div class="flex justify-content-between align-items-center">
+            Acciones
+          </div>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr>
+        <td *ngFor="let col of columns">
+          {{rowData[col.field]}}
+        </td>
+        <td>
+          <a style="cursor: pointer;" [routerLink]="'/alumnos/pagos/'+rowData.courseTurnStudentId"
+            class="btn btn-primary">Ver</a>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

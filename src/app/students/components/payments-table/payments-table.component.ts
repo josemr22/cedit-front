@@ -14,6 +14,8 @@ type DataPaymentTable = {
   balance: any;
   date_of_payment: any;
   observation: any;
+  type: string;
+  status: string;
 };
 
 @Component({
@@ -47,6 +49,7 @@ export class PaymentsTableComponent implements OnInit, OnChanges {
       { field: 'balance', header: 'Saldo' },
       { field: 'date_of_payment', header: 'Fecha del Pago' },
       { field: 'observation', header: 'Observacion' },
+      { field: 'status', header: 'Estado' },
     ];
 
     this.exportColumns = this.cols.map((col) => ({
@@ -56,53 +59,56 @@ export class PaymentsTableComponent implements OnInit, OnChanges {
   }
 
   fillTable() {
+    if (this.payment.type == 1) {
+      this.data.push({
+        concept: 'Costo Total',
+        amount: this.payment.amount.toFixed(2),
+        balance: 0,
+        date_of_payment: this.payment.created_at,
+        observation: 'Al Contado',
+        status: 'Cancelado',
+        type: 'h',
+      });
+      return;
+    }
+
+    let j = 0;
+    const amountPayed = this.payment.installments.forEach((i) => {
+      j += i.balance;
+    });
+
     this.data.push({
       concept: 'Costo Total',
       amount: this.payment.amount.toFixed(2),
       balance: '',
       date_of_payment: '',
-      observation: '',
+      observation: 'Crédito',
+      status: j ? 'Deuda' : 'Cancelado',
+      type: 'h',
     });
     this.payment.installments.forEach((i) => {
-      if (i.type == 'm') {
+      this.data.push({
+        concept: i.type == 'm' ? 'Matrícula' : `Mensualidad ${i.number}`,
+        amount: i.amount.toFixed(2),
+        balance: i.balance.toFixed(2),
+        date_of_payment: i.created_at,
+        observation: i.observation || '---',
+        status: i.balance != 0 ? 'Deuda' : 'Cancelado',
+        type: 'i',
+      });
+      i.dampings.forEach((d, idx) => {
         this.data.push({
-          concept: 'Costo Matrícula',
-          amount: i.amount.toFixed(2),
-          balance: i.balance.toFixed(2),
-          date_of_payment: i.created_at,
-          observation: i.observation || '---',
+          concept: `Pago ${idx + 1}`,
+          amount: d.amount.toFixed(2),
+          balance: '',
+          date_of_payment: d.created_at,
+          observation: `${d.transaction.bank.name} ${
+            d.transaction.operation ? '- ' + d.transaction.operation : ''
+          }`,
+          status: '',
+          type: 'd',
         });
-        i.dampings.forEach((d, idx) => {
-          this.data.push({
-            concept: `Pago ${idx + 1}`,
-            amount: d.amount.toFixed(2),
-            balance: '',
-            date_of_payment: d.created_at,
-            observation: `${d.transaction.bank.name} ${
-              d.transaction.operation ? '- ' + d.transaction.operation : ''
-            }`,
-          });
-        });
-      } else {
-        this.data.push({
-          concept: `Costo Mensualidad`,
-          amount: i.amount.toFixed(2),
-          balance: i.balance.toFixed(2),
-          date_of_payment: i.created_at,
-          observation: i.observation || '---',
-        });
-        i.dampings.forEach((d, idx) => {
-          this.data.push({
-            concept: `Pago ${idx + 1}`,
-            amount: d.amount.toFixed(2),
-            balance: '',
-            date_of_payment: d.created_at,
-            observation: `${d.transaction.bank.name} ${
-              d.transaction.operation ? '- ' + d.transaction.operation : ''
-            }`,
-          });
-        });
-      }
+      });
     });
   }
 }

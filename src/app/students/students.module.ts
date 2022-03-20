@@ -8,9 +8,10 @@ import { IndexComponent } from './index.component';
 import { StudentsListComponent } from './components/students-list/students-list.component';
 import { PaymentsComponent } from './components/payments/payments.component';
 import { PaymentsTableComponent } from './components/payments-table/payments-table.component';
+import { OperationsComponent } from './components/operations/operations.component';
 
 @NgModule({
-  declarations: [IndexComponent, StudentsListComponent, PaymentsComponent, PaymentsTableComponent],
+  declarations: [IndexComponent, StudentsListComponent, PaymentsComponent, PaymentsTableComponent, OperationsComponent],
   imports: [
     CommonModule,
     StudentsRoutingModule,

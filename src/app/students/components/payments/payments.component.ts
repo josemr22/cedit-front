@@ -12,6 +12,7 @@ import {
   Student,
   StudentWithCourse,
 } from '../../interfaces/student-with-course.interface';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-payments',
@@ -45,7 +46,8 @@ export class PaymentsComponent implements OnInit {
     private studentService: StudentsService,
     private courseService: CoursesService,
     private sharedService: SharedService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -53,6 +55,15 @@ export class PaymentsComponent implements OnInit {
       .getDepartments()
       .subscribe((d) => (this.departments = d));
     this.courseService.getCourses().subscribe((c) => (this.courses = c));
+
+    this.activatedRoute.params.subscribe(({ id }) => {
+      console.log(id);
+      if (id) {
+        this.studentService.getStudentWithCourse(id).subscribe((swc) => {
+          this.onSelectStudent(swc);
+        });
+      }
+    });
   }
 
   filterStudent(event: any) {
