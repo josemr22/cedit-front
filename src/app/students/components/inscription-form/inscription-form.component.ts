@@ -3,7 +3,10 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedService } from '../../../shared/services/shared.service';
 import { Department } from '../../../shared/interfaces/department.interface';
-import { Course } from '../../../students/interfaces/student.interface';
+import {
+  Course,
+  Student,
+} from '../../../students/interfaces/student.interface';
 import { CoursesService } from '../../../courses/services/courses.service';
 import { CourseTurn } from 'src/app/courses/interfaces/course-turn.interface';
 import { Bank } from '../../../shared/interfaces/bank.interface';
@@ -16,6 +19,8 @@ import Swal from 'sweetalert2';
   styles: [],
 })
 export class InscriptionFormComponent implements OnInit {
+  student: Student | null = null;
+
   departments: Department[] = [];
   courses: Course[] = [];
   courseTurns: CourseTurn[] = [];
@@ -110,9 +115,53 @@ export class InscriptionFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.activatedRoute.params.subscribe(({ id }) => {
+      if (id == 'nuevo') {
+        return;
+      }
+      this.studentService.getStudent(id).subscribe((s) => {
+        this.student = s;
+        this.form.reset({
+          name: s.name,
+          dni: s.dni,
+          email: s.email,
+          department_id: s.department_id,
+          address: s.address,
+          phone: s.phone,
+          cellphone: s.cellphone,
+          date_of_birth: s.date_of_birth,
+          course_id: s.course_id,
+          course_turn_id: s.course_turn_id,
+          start_date: null,
+          registered_by: 1,
+          enrolled_by: 1,
+          payment: {
+            type: '1',
+            observation: null,
+            amount: 0,
+            enroll_amount: 0,
+            pay_enroll_amount: 0,
+            installments: [
+              {
+                amount: 0,
+                pay: 0,
+              },
+            ],
+          },
+          transaction: {
+            bank_id: null,
+            operation: null,
+            user_id: 1,
+            name: null,
+            payment_date: null,
+          },
+        });
+      });
+    });
+
     this.sharedService.getDepartments().subscribe((d) => {
       this.departments = d;
-      if (this.departments.length > 0) {
+      if (this.departments.length > 0 && !this.student) {
         this.form.get('department_id')!.setValue(this.departments[0].id);
       }
     });
@@ -189,7 +238,7 @@ export class InscriptionFormComponent implements OnInit {
     const courseId = Number((event.target as HTMLSelectElement).value);
     this.courseService.getTurns(courseId).subscribe((ct) => {
       this.courseTurns = ct;
-      if (this.courseTurns.length > 0) {
+      if (this.courseTurns.length > 0 && !this.student) {
         this.form.get('course_turn_id')!.setValue(this.courseTurns[0].id);
       }
     });
@@ -227,7 +276,14 @@ export class InscriptionFormComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    this.studentService.enrollStudent(this.form.value).subscribe((s) => {
+    const data = this.form.value;
+    if (this.student) {
+      const data = {
+        ...this.form.value,
+        student_id: this.student.id,
+      };
+    }
+    this.studentService.enrollStudent(data).subscribe((s) => {
       Swal.fire('Bien hecho!', 'Estudiante inscrito correctamente', 'success');
       this.router.navigateByUrl('/alumnos/lista');
     });

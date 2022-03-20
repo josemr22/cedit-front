@@ -16,6 +16,10 @@ const apiUrl = environment.apiUrl;
 export class StudentsService {
   constructor(private http: HttpClient) {}
 
+  getStudent(id: number) {
+    return this.http.get<Student>(`${apiUrl}/students/${id}`);
+  }
+
   getStudents() {
     return this.http.get<Student[]>(`${apiUrl}/students`);
   }
