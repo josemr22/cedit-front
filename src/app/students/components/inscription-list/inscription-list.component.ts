@@ -1,25 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import * as FileSaver from 'file-saver';
 import Swal from 'sweetalert2';
-import { PreStudent } from './interfaces/pre-student.interface';
-import { InscriptionsService } from './services/inscriptions.service';
+import { Student } from '../../interfaces/student.interface';
+import { StudentsService } from '../../services/students.service';
 
 @Component({
-  selector: 'app-index',
-  templateUrl: './index.component.html',
+  selector: 'app-inscription-list',
+  templateUrl: './inscription-list.component.html',
   styles: [],
 })
-export class IndexComponent implements OnInit {
-  _preStudents: PreStudent[] = [];
+export class InscriptionListComponent implements OnInit {
+  _students: Student[] = [];
   cols!: any[];
   exportColumns!: any[];
 
-  constructor(private inscriptionsService: InscriptionsService) {}
+  constructor(private studentsService: StudentsService) {}
 
   ngOnInit(): void {
-    this.inscriptionsService
-      .getPreStudents()
-      .subscribe((s) => (this._preStudents = s));
+    this.studentsService.getStudents().subscribe((s) => (this._students = s));
 
     this.cols = [
       { field: 'dni', header: 'Identificación' },
@@ -34,8 +32,8 @@ export class IndexComponent implements OnInit {
     }));
   }
 
-  get preStudents() {
-    return this._preStudents.map((s) => ({
+  get students() {
+    return this._students.map((s) => ({
       id: s.id,
       dni: s.dni,
       name: s.name,
@@ -45,9 +43,9 @@ export class IndexComponent implements OnInit {
   }
 
   delete(id: number) {
-    this.inscriptionsService.deletePreStudent(id).subscribe((_) => {
-      const idx = this._preStudents.findIndex((s) => s.id == id);
-      this._preStudents.splice(idx, 1);
+    this.studentsService.deleteStudents(id).subscribe((_) => {
+      const idx = this._students.findIndex((s) => s.id == id);
+      this._students.splice(idx, 1);
       Swal.fire('Bien Hecho!', 'Eliminado Correctamente', 'success');
     });
   }
@@ -60,7 +58,7 @@ export class IndexComponent implements OnInit {
 
   exportExcel() {
     import('xlsx').then((xlsx) => {
-      const worksheet = xlsx.utils.json_to_sheet(this.preStudents);
+      const worksheet = xlsx.utils.json_to_sheet(this.students);
       const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
       const excelBuffer: any = xlsx.write(workbook, {
         bookType: 'xlsx',

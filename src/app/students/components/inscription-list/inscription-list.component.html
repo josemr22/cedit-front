@@ -6,18 +6,18 @@
     </div>
     <div class="card-body">
       <div class="row">
-        <p-table #dt [columns]="cols" [paginator]="true" [value]="preStudents" responsiveLayout="scroll" dataKey="id"
+        <p-table #dt [columns]="cols" [paginator]="true" [value]="students" responsiveLayout="scroll" dataKey="id"
           [exportHeader]="'customExportHeader'" [rowsPerPageOptions]="[10,25,50]" [rows]="10">
           <ng-template pTemplate="caption">
             <div class="d-flex justify-content-between">
-              <a routerLink="/preinscripcion/nuevo" href="#" class="btn btn-primary">+</a>
+              <a routerLink="/alumnos/inscripcion/inscribir/nuevo" href="#" class="btn btn-primary">+</a>
               <div>
                 <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
                   class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
                 <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()"
                   class="p-button-warning mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
                 <!-- <button type="button" pButton pRipple icon="pi pi-filter" (click)="dt.exportCSV({selectionOnly:true})"
-                   class="p-button-info ml-auto" pTooltip="Selection Only" tooltipPosition="bottom"></button> -->
+                     class="p-button-info ml-auto" pTooltip="Selection Only" tooltipPosition="bottom"></button> -->
               </div>
             </div>
             <div class="table-header mt-3 d-flex justify-content-end">
@@ -28,8 +28,8 @@
           <ng-template pTemplate="header" let-columns>
             <tr>
               <!-- <th *ngFor="let col of columns">
-                    {{col.header}}
-                  </th> -->
+                      {{col.header}}
+                    </th> -->
               <th *ngFor="let col of columns" [pSortableColumn]="col.field">
                 <div class="flex justify-content-between align-items-center">
                   {{col.header}}
@@ -47,10 +47,8 @@
                 {{rowData[col.field]}}
               </td>
               <td>
-                <button [routerLink]="['/usuarios', rowData.id]" pButton type="button" icon="pi pi-pencil"
-                  class="p-button-sm mr-1"></button>
-                <button (click)="delete(rowData.id)" pButton type="button" icon="pi pi-trash"
-                  class="p-button-sm p-button-danger"></button>
+                <button [routerLink]="['/alumnos/inscripcion/inscribir', rowData.id]" type="button"
+                  class="btn btn-success">+</button>
               </td>
             </tr>
           </ng-template>

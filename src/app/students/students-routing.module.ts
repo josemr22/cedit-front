@@ -5,27 +5,42 @@ import { IndexComponent } from './index.component';
 import { StudentsListComponent } from './components/students-list/students-list.component';
 import { PaymentsComponent } from './components/payments/payments.component';
 import { OperationsComponent } from './components/operations/operations.component';
+import { InscriptionListComponent } from './components/inscription-list/inscription-list.component';
+import { InscriptionFormComponent } from './components/inscription-form/inscription-form.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: IndexComponent,
     children: [
       {
-        path: 'lista',
-        component: StudentsListComponent,
+        path: 'inscripcion',
+        component: InscriptionListComponent,
       },
       {
-        path: 'pagos/:id',
-        component: PaymentsComponent,
+        path: 'inscripcion/inscribir/:id',
+        component: InscriptionFormComponent,
       },
       {
-        path: 'operaciones',
-        component: OperationsComponent,
-      },
-      {
-        path: '**',
-        redirectTo: 'lista',
+        path: '',
+        component: IndexComponent,
+        children: [
+          {
+            path: 'lista',
+            component: StudentsListComponent,
+          },
+          {
+            path: 'pagos/:id',
+            component: PaymentsComponent,
+          },
+          {
+            path: 'operaciones',
+            component: OperationsComponent,
+          },
+          {
+            path: '**',
+            redirectTo: 'lista',
+          },
+        ],
       },
     ],
   },

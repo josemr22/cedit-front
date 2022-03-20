@@ -39,6 +39,11 @@
         <span *ngIf="isInvalid('cellphone')" class="text-danger text-form">El campo es requerido</span>
       </div>
       <div>
+        <label>Fecha de Nacimiento</label>
+        <input formControlName="date_of_birth" type="date" class="form-control">
+        <span *ngIf="isInvalid('date_of_birth')" class="text-danger text-form">El campo es requerido</span>
+      </div>
+      <div>
         <label>Curso</label>
         <select (change)="onChangeCourse($event)" formControlName="course_id" class="form-control">
           <option value="">Seleccione un curso</option>
@@ -63,17 +68,29 @@
     <div class="col-6" formGroupName="transaction">
       <div>
         <label>Banco</label>
-        <select formControlName="bank_id" class="form-control">
+        <select (change)="onChangeBank($event)" formControlName="bank_id" class="form-control">
           <option *ngFor="let item of banks" [value]="item.id">
             {{item.name}}</option>
         </select>
-        <span *ngIf="isInvalid('bank_id')" class="text-danger text-form">El campo es requerido</span>
+        <span *ngIf="isInvalid('transaction.bank_id')" class="text-danger text-form">El campo es requerido</span>
       </div>
-      <div>
+      <div *ngIf="form.get('transaction.bank_id')!.value != '1' && form.get('transaction.bank_id')!.value != '6'">
         <label>Número de Operación</label>
         <input formControlName="operation" type="text" class="form-control">
-        <!-- <span *ngIf="isInvalid('start_date')" class="text-danger text-form">El campo es requerido</span> -->
+        <span *ngIf="isInvalid('transaction.operation')" class="text-danger text-form">El campo es requerido</span>
       </div>
+      <ng-container *ngIf="form.get('transaction.bank_id')!.value == '6'">
+        <div>
+          <label>Nombre</label>
+          <input formControlName="name" type="text" class="form-control">
+          <span *ngIf="isInvalid('transaction.name')" class="text-danger text-form">El campo es requerido</span>
+        </div>
+        <div>
+          <label>Fecha de Pago</label>
+          <input formControlName="payment_date" type="date" class="form-control">
+          <span *ngIf="isInvalid('transaction.payment_date')" class="text-danger text-form">El campo es requerido</span>
+        </div>
+      </ng-container>
     </div>
   </div>
 
@@ -82,59 +99,65 @@
     <div class="d-flex" style="gap: 15px">
       <div>
         <label>Costo Total</label>
-        <input formControlName="amount" type="number" class="form-control">
+        <input [attr.disabled]="form.get('payment.type')!.value == '0' ? true : null" formControlName="amount"
+          type="number" class="form-control">
         <span *ngIf="isInvalid('payment.amount')" class="text-danger text-form">Ingrese un costo total válido</span>
       </div>
       <div>
         <label>Tipo de Pago</label>
         <div class="form-check">
-          <input (change)="onChangePaymentType($event)" value="1" formControlName="payment_type"
-            class="form-check-input" type="radio" id="contado">
+          <input (change)="onChangePaymentType($event)" value="1" formControlName="type" class="form-check-input"
+            type="radio" id="contado">
           <label class="form-check-label" for="contado">
             Contado
           </label>
         </div>
         <div class="form-check">
-          <input (change)="onChangePaymentType($event)" value="0" formControlName="payment_type"
-            class="form-check-input" type="radio" id="credito">
+          <input (change)="onChangePaymentType($event)" value="0" formControlName="type" class="form-check-input"
+            type="radio" id="credito">
           <label class="form-check-label" for="credito">
             Crédito
           </label>
         </div>
-        <span *ngIf="isInvalid('payment.payment_type')" class="text-danger text-form">El campo es requerido</span>
+        <span *ngIf="isInvalid('payment.type')" class="text-danger text-form">El campo es requerido</span>
       </div>
-      <ng-container *ngIf="form.get('payment')!.get('payment_type')?.value == '0'">
+      <ng-container *ngIf="form.get('payment')!.get('type')?.value == '0'">
         <div>
           <label>Monto Total de Matrícula</label>
-          <input formControlName="amount_enrollment" type="number" class="form-control">
-          <span *ngIf="isInvalid('payment.amount_enrollment')" class="text-danger text-form">Ingrese un monto
+          <input formControlName="enroll_amount" type="number" class="form-control">
+          <span *ngIf="isInvalid('payment.enroll_amount')" class="text-danger text-form">Ingrese un monto
             válido</span>
         </div>
         <div>
           <label>Monto a pagar de Matrícula</label>
-          <input formControlName="amount_to_pay_enrollment" type="number" class="form-control">
-          <span *ngIf="isInvalid('payment.amount_to_pay_enrollment')" class="text-danger text-form">Ingrese un monto
+          <input formControlName="pay_enroll_amount" type="number" class="form-control">
+          <span *ngIf="isInvalid('payment.pay_enroll_amount')" class="text-danger text-form">Ingrese un monto
             válido</span>
         </div>
       </ng-container>
     </div>
-    <div *ngIf="form.get('payment')!.get('payment_type')?.value == '0'" class="d-flex" style="gap: 15px">
+    <div *ngIf="form.get('payment.type')?.value == '0'" class="d-flex" style="gap: 15px">
       <div>
         <label>Mensualidades</label>
-        <select formControlName="quotas" class="form-control">
-          <option *ngFor="let item of quotas" [value]="item">{{item}}</option>
+        <select (change)="onChangeNInstallments($event)" class="form-control">
+          <option *ngFor="let item of installmentsNames" [value]="item">{{item}}</option>
         </select>
-        <span *ngIf="isInvalid('payment.quotas')" class="text-danger text-form">El campo es requerido</span>
       </div>
-      <div>
-        <label>Mensualidad 1</label>
-        <input formControlName="quote1" type="number" class="form-control">
-        <span *ngIf="isInvalid('payment.quote1')" class="text-danger text-form">El campo es requerido</span>
-      </div>
-      <div>
-        <label>Pago Mensualidad 1</label>
-        <input formControlName="pay_quote1" type="number" class="form-control">
-        <span *ngIf="isInvalid('payment.pay_quote1')" class="text-danger text-form">El campo es requerido</span>
+      <div formArrayName="installments">
+        <div *ngFor="let installment of installments.controls; let i=index">
+          <div [formGroupName]="i" class="d-flex">
+            <div>
+              <label>Mensualidad {{i+1}}</label>
+              <input formControlName="amount" type="number" class="form-control">
+              <span *ngIf="isFormArrayInvalid('amount', i)" class="text-danger text-form">Ingrese un monto válido</span>
+            </div>
+            <div *ngIf="i<1">
+              <label>Pago Mensualidad {{i+1}}</label>
+              <input formControlName="pay" type="number" class="form-control">
+              <span *ngIf="isFormArrayInvalid('pay', i)" class="text-danger text-form">Ingrese un monto válido</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div>
@@ -148,3 +171,7 @@
     <a routerLink="/preinscripcion" class="btn btn-primary">volver</a>
   </div>
 </form>
+
+<pre>
+    {{form.value | json}}
+</pre>
