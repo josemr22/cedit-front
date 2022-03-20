@@ -58,7 +58,7 @@ export class PaymentsComponent implements OnInit {
 
     this.activatedRoute.params.subscribe(({ id }) => {
       console.log(id);
-      if (id) {
+      if (id && id != 'nuevo') {
         this.studentService.getStudentWithCourse(id).subscribe((swc) => {
           this.onSelectStudent(swc);
         });

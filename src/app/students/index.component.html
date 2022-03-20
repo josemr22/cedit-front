@@ -11,13 +11,12 @@
                aria-selected="true">Alumnos</button>
            </li>
            <li class="nav-item" role="presentation">
-             <button routerLink="/alumnos/pagos" routerLinkActive="active" class="nav-link" type="button" role="tab"
-               aria-controls="infoPagos" aria-selected="false">Información de Pagos</button>
+             <button routerLink="/alumnos/pagos/nuevo" routerLinkActive="active" class="nav-link" type="button"
+               role="tab" aria-controls="infoPagos" aria-selected="false">Información de Pagos</button>
            </li>
-           <li routerLink="/alumnos/operaciones" routerLinkActive="active" class="nav-item" role="presentation">
-             <button class="nav-link" id="buscarOp-tab" data-bs-toggle="pill" data-bs-target="#buscarOp" type="button"
-               role="tab" aria-controls="buscarOp" aria-selected="false">Buscar por número de
-               operación</button>
+           <li class="nav-item" role="presentation">
+             <button routerLink="/alumnos/operaciones" routerLinkActive="active" class="nav-link" id="buscarOp-tab"
+               type="button" role="tab">Buscar por número de operación</button>
            </li>
          </ul>
          <div class="tab-content" id="pills-tabContent"></div>
