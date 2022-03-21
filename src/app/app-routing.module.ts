@@ -28,6 +28,11 @@ const routes: Routes = [
           import('./students/students.module').then((m) => m.StudentsModule),
       },
       {
+        path: 'caja',
+        loadChildren: () =>
+          import('./till/till.module').then((m) => m.TillModule),
+      },
+      {
         path: '**',
         redirectTo: '',
       },

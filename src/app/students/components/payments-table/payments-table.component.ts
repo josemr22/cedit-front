@@ -16,6 +16,7 @@ type DataPaymentTable = {
   observation: any;
   type: string;
   status: string;
+  installment_id?: number;
 };
 
 @Component({
@@ -73,7 +74,7 @@ export class PaymentsTableComponent implements OnInit, OnChanges {
     }
 
     let j = 0;
-    const amountPayed = this.payment.installments.forEach((i) => {
+    this.payment.installments.forEach((i) => {
       j += i.balance;
     });
 
@@ -95,6 +96,7 @@ export class PaymentsTableComponent implements OnInit, OnChanges {
         observation: i.observation || '---',
         status: i.balance != 0 ? 'Deuda' : 'Cancelado',
         type: 'i',
+        installment_id: i.id,
       });
       i.dampings.forEach((d, idx) => {
         this.data.push({

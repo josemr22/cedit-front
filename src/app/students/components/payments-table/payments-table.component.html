@@ -16,12 +16,21 @@
           {{col.header}}
         </div>
       </th>
+      <th>
+        <div class="flex justify-content-between align-items-center">
+          Acciones
+        </div>
+      </th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-rowData let-columns="columns">
     <tr [style]="rowData.type == 'd' ? 'background-color:#eee;' : ''">
       <td *ngFor="let col of columns">
         {{rowData[col.field]}}
+      </td>
+      <td>
+        <a *ngIf="rowData.installment_id" style="cursor: pointer;"
+          [routerLink]="'/caja/pagar/'+rowData.installment_id">Pagar</a>
       </td>
     </tr>
   </ng-template>

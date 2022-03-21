@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MainLayoutComponent } from '../shared/main-layout/main-layout.component';
 import { IndexComponent } from './index.component';
 import { StudentsListComponent } from './components/students-list/students-list.component';
 import { PaymentsComponent } from './components/payments/payments.component';
