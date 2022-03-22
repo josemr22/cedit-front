@@ -27,7 +27,28 @@
   
       <div>
         <h4 style="font-size: large;font-weight: 700;">Datos del Comprobante</h4>
-        <div class="row container">
+        <table class="table table-light table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Comprobante</th>              
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{date | date}}</td>
+              <td>
+                <select class="form-control" formControlName="voucher_type">
+                  <option value="R">Recibo</option>
+                  <option value="B">Boleta</option>
+                  <option value="F">Factura</option>
+                </select>
+                <span *ngIf="isInvalid('voucher_type')" class="text-danger text-form">El campo es requerido</span>
+              </td>              
+            </tr>
+          </tbody>
+        </table>
+        <!-- <div class="row container">
           <div class="col-6">
             <div class="row">
               <div class="col-6">
@@ -53,11 +74,11 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
   
       <div>
-        <div class="alert alert-warning" role="alert">
+        <div class="alert alert-primary" role="alert">
           <p class="fw-bold">
             Datos de transaccion
           </p>  
@@ -128,7 +149,7 @@
 
       <hr>
       <p class="mb-0 d-grid">
-        <button type="submit" class="btn btn-danger btn-lg">Realizar Pago</button>
+        <button type="submit" class="btn btn-primary btn-lg">Realizar Pago</button>
       </p>
     </div>    
 
