@@ -1,106 +1,138 @@
-<div *ngIf="installment">
+<div *ngIf="installment">  
   <form (ngSubmit)="save()" [formGroup]="form">
-    <div>
-      <h1>CORPORACIÓN CEDIT E.I.R.L</h1>
-    </div>
-
-    <div>
-      <h3>Generar Pago - Datos del Cliente</h3>
-      <table>
-        <tr>
-          <td>Alumno</td>
-          <td>{{student.name}}</td>
-        </tr>
-        <tr>
-          <td>Documento</td>
-          <td>{{student.dni}}</td>
-        </tr>
-        <tr>
-          <td>Dirección</td>
-          <td>{{student.address}}</td>
-        </tr>
-      </table>
-    </div>
-
-    <div>
-      <h3>Datos del Comprobante</h3>
-      <div class="row">
-        <div class="col">
-          Fecha
-        </div>
-        <div class="col">
-          {{date | date}}
-        </div>
-        <div class="col">
-          Comprobante
-        </div>
-        <div class="col">
-          <select class="form-control" formControlName="voucher_type">
-            <option value="R">Recibo</option>
-            <option value="B">Boleta</option>
-            <option value="F">Factura</option>
-          </select>
-          <span *ngIf="isInvalid('voucher_type')" class="text-danger text-form">El campo es requerido</span>
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <h3>Datos de transaccion (SI EL PAGO NO FUE REALIZADO POR TRANSACCION, DEJAR EN BLANCO)</h3>
-      <div class="col-6" formGroupName="transaction">
-        <div>
-          <label>Banco</label>
-          <select (change)="onChangeBank($event)" formControlName="bank_id" class="form-control">
-            <option *ngFor="let item of banks" [value]="item.id">
-              {{item.name}}</option>
-          </select>
-          <span *ngIf="isInvalid('transaction.bank_id')" class="text-danger text-form">El campo es requerido</span>
-        </div>
-        <div *ngIf="form.get('transaction.bank_id')!.value != '1' && form.get('transaction.bank_id')!.value != '6'">
-          <label>Número de Operación</label>
-          <input formControlName="operation" type="text" class="form-control">
-          <span *ngIf="isInvalid('transaction.operation')" class="text-danger text-form">El campo es requerido</span>
-        </div>
-        <ng-container *ngIf="form.get('transaction.bank_id')!.value == '6'">
-          <div>
-            <label>Nombre</label>
-            <input formControlName="name" type="text" class="form-control">
-            <span *ngIf="isInvalid('transaction.name')" class="text-danger text-form">El campo es requerido</span>
-          </div>
-          <div>
-            <label>Fecha de Pago</label>
-            <input formControlName="payment_date" type="date" class="form-control">
-            <span *ngIf="isInvalid('transaction.payment_date')" class="text-danger text-form">El campo es
-              requerido</span>
-          </div>
-        </ng-container>
-      </div>
-    </div>
-
-    <div>
-      <h2>Saldo = S/ {{installment.balance.toFixed(2)}}</h2>
+    <div class="alert alert-default" role="alert">
+      <h1 class="alert-heading" style="text-align: center;font-size: xxx-large;font-weight: 900;">        
+          CORPORACIÓN CEDIT E.I.R.L        
+      </h1>
+      
       <div>
-        <label>Monto a Pagar</label>
-        <input formControlName="amount" type="number" class="form-control">
-        <span class="text-danger form-text" *ngIf="isInvalid('amount')">Ingrese un monto válido</span>
+        <h4 style="font-size: large;font-weight: 700;">Generar Pago - Datos del Cliente</h4>
+        <table class="table table-light table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>Alumno</th>
+              <th>Documento</th>
+              <th>Dirección</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{student.name}}</td>
+              <td>{{student.dni}}</td>
+              <td>{{student.address}}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th *ngFor="let col of tableData.cols">
-              {{col}}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td *ngFor="let val of tableData.values">
-              {{val}}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <button type="submit" class="btn btn-primary">Realizar Pago</button>
+  
+      <div>
+        <h4 style="font-size: large;font-weight: 700;">Datos del Comprobante</h4>
+        <div class="row container">
+          <div class="col-6">
+            <div class="row">
+              <div class="col-6">
+                <div class="row" style="background-color: #084298;color: white;padding: 0.6rem;">
+                  Fecha
+                </div>
+                <div class="row" style="padding: 1rem;">
+                  {{date | date}}
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="row" style="background-color: #084298;color: white;padding: 0.6rem;">
+                  Comprobante
+                </div>
+                <div class="row" style="padding: 0.6rem;">
+                  <select class="form-control" formControlName="voucher_type">
+                    <option value="R">Recibo</option>
+                    <option value="B">Boleta</option>
+                    <option value="F">Factura</option>
+                  </select>
+                  <span *ngIf="isInvalid('voucher_type')" class="text-danger text-form">El campo es requerido</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div>
+        <div class="alert alert-warning" role="alert">
+          <p class="fw-bold">
+            Datos de transaccion
+          </p>  
+          <hr> 
+          <p class="font-monospace">(SI EL PAGO NO FUE REALIZADO POR TRANSACCION, DEJAR EN BLANCO)</p>
+        </div>   
+        <div class="row">
+          <div class="col-6" formGroupName="transaction">
+            <div class="mb-3">
+              <label class="form-label">Banco</label>
+              <select (change)="onChangeBank($event)" formControlName="bank_id" class="form-control">
+                <option *ngFor="let item of banks" [value]="item.id">
+                  {{item.name}}</option>
+              </select>
+              <span *ngIf="isInvalid('transaction.bank_id')" class="text-danger text-form">El campo es requerido</span>
+            </div>
+            <div class="mb-3" *ngIf="form.get('transaction.bank_id')!.value != '1' && form.get('transaction.bank_id')!.value != '6'">
+              <label class="form-label">Número de Operación</label>
+              <input formControlName="operation" type="text" class="form-control">
+              <span *ngIf="isInvalid('transaction.operation')" class="text-danger text-form">El campo es requerido</span>
+            </div>
+            <ng-container *ngIf="form.get('transaction.bank_id')!.value == '6'">
+              <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input formControlName="name" type="text" class="form-control">
+                <span *ngIf="isInvalid('transaction.name')" class="text-danger text-form">El campo es requerido</span>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Fecha de Pago</label>
+                <input formControlName="payment_date" type="date" class="form-control">
+                <span *ngIf="isInvalid('transaction.payment_date')" class="text-danger text-form">El campo es
+                  requerido</span>
+              </div>
+            </ng-container>
+          </div>
+          <div class="col-6">
+            <div class="alert alert-success" role="alert">
+              <h2 class="alert-heading">Saldo = S/ {{installment.balance.toFixed(2)}}</h2>
+            </div>           
+              <div class="mb-3">
+                <label class="form-label">Monto a Pagar</label>
+                <input formControlName="amount" type="number" class="form-control" value="">
+                <span class="text-danger form-text" *ngIf="isInvalid('amount')">Ingrese un monto válido</span>
+              </div>              
+          </div>
+        </div>   
+      </div>
+  
+      <div class="mb-3 container">        
+        
+        <table class="table table-light table-bordered table-striped">
+          <thead>
+            <tr>
+              <th *ngFor="let col of tableData.cols">
+                {{col}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td *ngFor="let val of tableData.values">
+                {{val}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr>
+      <p class="mb-0 d-grid">
+        <button type="submit" class="btn btn-danger btn-lg">Realizar Pago</button>
+      </p>
+    </div>    
+
+    
+    
   </form>
 </div>
