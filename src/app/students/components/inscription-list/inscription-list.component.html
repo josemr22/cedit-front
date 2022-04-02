@@ -6,8 +6,9 @@
     </div>
     <div class="card-body">
       <div class="row">
-        <p-table #dt [columns]="cols" [paginator]="true" [value]="students" responsiveLayout="scroll" dataKey="id"
-          [exportHeader]="'customExportHeader'" [rowsPerPageOptions]="[10,25,50]" [rows]="10">
+        <p-table #dt [loading]="isLoading" [columns]="cols" [paginator]="true" [value]="students"
+          responsiveLayout="scroll" dataKey="id" [exportHeader]="'customExportHeader'" [rowsPerPageOptions]="[10,25,50]"
+          [rows]="10">
           <ng-template pTemplate="caption">
             <div class="d-flex justify-content-between">
               <a routerLink="/alumnos/inscripcion/inscribir/nuevo" href="#" class="btn btn-primary">+</a>

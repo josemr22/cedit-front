@@ -64,8 +64,9 @@
       </div>
       <div class="card-body">
         <div class="row">
-          <p-table #dt [columns]="cols" [paginator]="true" [value]="students" responsiveLayout="scroll" dataKey="id"
-            [exportHeader]="'customExportHeader'" [rowsPerPageOptions]="[10,25,50]" [rows]="10">
+          <p-table [loading]="isLoading" #dt [columns]="cols" [paginator]="true" [value]="students"
+            responsiveLayout="scroll" dataKey="id" [exportHeader]="'customExportHeader'"
+            [rowsPerPageOptions]="[10,25,50]" [rows]="10">
             <ng-template pTemplate="caption">
               <div class="d-flex justify-content-between">
                 <a routerLink="/usuarios/nuevo" href="#" class="btn btn-primary">+</a>

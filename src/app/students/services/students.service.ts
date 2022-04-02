@@ -14,7 +14,7 @@ const apiUrl = environment.apiUrl;
   providedIn: 'root',
 })
 export class StudentsService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getStudent(id: number) {
     return this.http.get<Student>(`${apiUrl}/students/${id}`);
@@ -62,7 +62,7 @@ export class StudentsService {
 
   getPayment(courseTurnStudentId: number) {
     return this.http.get<Payment>(
-      `${apiUrl}/students/payment/${courseTurnStudentId}`
+      `${apiUrl}/students/payment/course/${courseTurnStudentId}`
     );
   }
 

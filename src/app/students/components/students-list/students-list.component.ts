@@ -29,12 +29,14 @@ export class StudentsListComponent implements OnInit {
     start_date: [''],
   });
 
+  isLoading: boolean = false;
+
   constructor(
     private coursesService: CoursesService,
     private sharedService: SharedService,
     private fb: FormBuilder,
     private studentService: StudentsService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.coursesService
@@ -88,9 +90,13 @@ export class StudentsListComponent implements OnInit {
     const params: HttpParams = new HttpParams({
       fromObject: this.filters.value,
     });
+    this.isLoading = true;
     this.studentService
       .getStudentsWithCourse(params)
-      .subscribe((students) => (this._students = students));
+      .subscribe((students) => {
+        this.isLoading = false;
+        this._students = students;
+      });
   }
 
   delete(id: number) {

@@ -14,10 +14,15 @@ export class InscriptionListComponent implements OnInit {
   cols!: any[];
   exportColumns!: any[];
 
-  constructor(private studentsService: StudentsService) {}
+  isLoading: boolean = true;
+
+  constructor(private studentsService: StudentsService) { }
 
   ngOnInit(): void {
-    this.studentsService.getStudents().subscribe((s) => (this._students = s));
+    this.studentsService.getStudents().subscribe((s) => {
+      this._students = s;
+      this.isLoading = false;
+    });
 
     this.cols = [
       { field: 'dni', header: 'Identificación' },

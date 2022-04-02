@@ -32,7 +32,7 @@ export class PaymentsTableComponent implements OnInit, OnChanges {
   exportColumns!: any[];
   data: DataPaymentTable[] = [];
 
-  constructor(private studentService: StudentsService) {}
+  constructor(private studentService: StudentsService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     const id = changes.studentWithCourseId.currentValue;
@@ -104,9 +104,8 @@ export class PaymentsTableComponent implements OnInit, OnChanges {
           amount: d.amount.toFixed(2),
           balance: '',
           date_of_payment: d.created_at,
-          observation: `${d.transaction.bank.name} ${
-            d.transaction.operation ? '- ' + d.transaction.operation : ''
-          }`,
+          observation: `${d.transaction.bank.name} ${d.transaction.operation ? '- ' + d.transaction.operation : ''
+            }`,
           status: '',
           type: 'd',
         });

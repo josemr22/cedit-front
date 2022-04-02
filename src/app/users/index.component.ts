@@ -15,10 +15,15 @@ export class IndexComponent implements OnInit {
   cols!: any[];
   exportColumns!: any[];
 
-  constructor(private userService: UsersService) {}
+  isLoading: boolean = true;
+
+  constructor(private userService: UsersService) { }
 
   ngOnInit(): void {
-    this.userService.getUsers().subscribe((users) => (this._users = users));
+    this.userService.getUsers().subscribe((users) => {
+      this._users = users;
+      this.isLoading = false;
+    });
 
     this.cols = [
       { field: 'id', header: 'Id' },
