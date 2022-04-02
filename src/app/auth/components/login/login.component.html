@@ -1,0 +1,13 @@
+<form (ngSubmit)="login()" [formGroup]="form">
+  <div>
+    <label for="email">Usuario:</label>
+    <input formControlName="email" type="text" id="email">
+    <span *ngIf="isInvalid('email')" class="text-danger">El campo es requerido</span>
+  </div>
+  <div>
+    <label for="password">Contraseña:</label>
+    <input formControlName="password" type="password" id="password">
+    <span *ngIf="isInvalid('password')" class="text-danger">El campo es requerido</span>
+  </div>
+  <button type="submit">Iniciar Sesión</button>
+</form>

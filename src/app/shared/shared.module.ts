@@ -8,9 +8,10 @@ import { RouterModule } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
-  declarations: [SidebarComponent, LoginComponent, MainLayoutComponent],
+  declarations: [SidebarComponent, LoginComponent, MainLayoutComponent, DashboardComponent],
   imports: [CommonModule, RouterModule, TableModule],
   exports: [SidebarComponent, TableModule, ButtonModule, AutoCompleteModule],
 })
