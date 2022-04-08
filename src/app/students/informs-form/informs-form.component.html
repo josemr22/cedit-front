@@ -1,0 +1,67 @@
+<h1>Informes</h1>
+<pre>{{form.value  | json}}</pre>
+<form (ngSubmit)="save()" [formGroup]="form">
+  <div class="row">
+    <div class="col-6">
+      <div>
+        <label>Nombre</label>
+        <input formControlName="name" type="text" class="form-control">
+        <span *ngIf="isInvalid('name')" class="text-danger text-form">El campo es requerido</span>
+      </div>
+      <div>
+        <label>DNI</label>
+        <input formControlName="dni" type="number" class="form-control">
+        <span *ngIf="isInvalid('dni')" class="text-danger text-form">El campo es requerido</span>
+      </div>
+      <div>
+        <label>Email</label>
+        <input formControlName="email" type="text" class="form-control">
+        <span *ngIf="isInvalid('email')" class="text-danger text-form">El campo es requerido</span>
+      </div>
+      <div>
+        <label>Departamento</label>
+        <select formControlName="department_id" class="form-control">
+          <option *ngFor="let item of departments" [value]="item.id">{{item.name}}</option>
+        </select>
+        <span *ngIf="isInvalid('department_id')" class="text-danger text-form">El campo es requerido</span>
+      </div>
+      <div>
+        <label>Dirección</label>
+        <input formControlName="address" type="text" class="form-control">
+        <span *ngIf="isInvalid('address')" class="text-danger text-form">El campo es requerido</span>
+      </div>
+      <div>
+        <label>Teléfono</label>
+        <input formControlName="phone" type="number" class="form-control">
+      </div>
+      <div>
+        <label>Celular</label>
+        <input formControlName="cellphone" type="number" class="form-control">
+        <span *ngIf="isInvalid('cellphone')" class="text-danger text-form">El campo es requerido</span>
+      </div>
+      <div>
+        <label>Fecha de Nacimiento</label>
+        <input formControlName="date_of_birth" type="date" class="form-control">
+        <span *ngIf="isInvalid('date_of_birth')" class="text-danger text-form">El campo es requerido</span>
+      </div>
+      <div>
+        <label>Curso</label>
+        <select (change)="onChangeCourse($event)" formControlName="course_id" class="form-control">
+          <option value="">Seleccione un curso</option>
+          <option *ngFor="let item of courses" [value]="item.id">{{item.name}}</option>
+        </select>
+        <span *ngIf="isInvalid('course_id')" class="text-danger text-form">El campo es requerido</span>
+      </div>
+      <div>
+        <label>Observación</label>
+        <input formControlName="observation" type="text" class="form-control">
+        <span *ngIf="isInvalid('observation')" class="text-danger text-form">El campo es requerido</span>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <button type="submit" class="btn btn-primary">Inscribir</button>
+    <a routerLink="/preinscripcion" class="btn btn-primary">volver</a>
+  </div>
+</form>

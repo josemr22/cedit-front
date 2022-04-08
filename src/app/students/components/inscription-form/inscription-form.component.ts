@@ -12,6 +12,7 @@ import { CourseTurn } from 'src/app/courses/interfaces/course-turn.interface';
 import { Bank } from '../../../shared/interfaces/bank.interface';
 import { StudentsService } from '../../../students/services/students.service';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-inscription-form',
@@ -59,7 +60,7 @@ export class InscriptionFormComponent implements OnInit {
     transaction: this.fb.group({
       bank_id: [null, [Validators.required]],
       operation: [null, []],
-      user_id: [1, []],
+      user_id: [this.authService.getUser().id, []],
       name: [null, []],
       payment_date: [null, []],
     }),
@@ -105,14 +106,14 @@ export class InscriptionFormComponent implements OnInit {
   // });
 
   constructor(
-    private studentsService: StudentsService,
     private fb: FormBuilder,
     private sharedService: SharedService,
     private courseService: CoursesService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private studentService: StudentsService
-  ) {}
+    private studentService: StudentsService,
+    private authService: AuthService,
+  ) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(({ id }) => {
@@ -131,7 +132,7 @@ export class InscriptionFormComponent implements OnInit {
           cellphone: s.cellphone,
           date_of_birth: s.date_of_birth,
           course_id: s.course_id,
-          course_turn_id: s.course_turn_id,
+          // course_turn_id: s.course_turn_id,
           start_date: null,
           registered_by: 1,
           enrolled_by: 1,
@@ -151,7 +152,7 @@ export class InscriptionFormComponent implements OnInit {
           transaction: {
             bank_id: null,
             operation: null,
-            user_id: 1,
+            user_id: this.authService.getUser().id,
             name: null,
             payment_date: null,
           },
@@ -238,7 +239,7 @@ export class InscriptionFormComponent implements OnInit {
     const courseId = Number((event.target as HTMLSelectElement).value);
     this.courseService.getTurns(courseId).subscribe((ct) => {
       this.courseTurns = ct;
-      if (this.courseTurns.length > 0 && !this.student) {
+      if (this.courseTurns.length) {
         this.form.get('course_turn_id')!.setValue(this.courseTurns[0].id);
       }
     });

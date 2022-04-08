@@ -6,22 +6,43 @@ import { PaymentsComponent } from './components/payments/payments.component';
 import { OperationsComponent } from './components/operations/operations.component';
 import { InscriptionListComponent } from './components/inscription-list/inscription-list.component';
 import { InscriptionFormComponent } from './components/inscription-form/inscription-form.component';
+import { InformsListComponent } from './informs-list/informs-list.component';
+import { InformsFormComponent } from './informs-form/informs-form.component';
+import { AuthGuard } from '../auth/guards/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
     children: [
       {
+        canActivate: [AuthGuard],
+        path: 'informes',
+        component: InformsListComponent,
+        data: { menu: 'informs' },
+      },
+      {
+        path: 'informes/nuevo',
+        component: InformsFormComponent,
+        canActivate: [AuthGuard],
+        data: { menu: 'informs' },
+      },
+      {
         path: 'inscripcion',
         component: InscriptionListComponent,
+        canActivate: [AuthGuard],
+        data: { menu: 'inscription' },
       },
       {
         path: 'inscripcion/inscribir/:id',
         component: InscriptionFormComponent,
+        canActivate: [AuthGuard],
+        data: { menu: 'inscription' },
       },
       {
         path: '',
         component: IndexComponent,
+        canActivate: [AuthGuard],
+        data: { menu: 'students' },
         children: [
           {
             path: 'lista',
@@ -49,4 +70,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class StudentsRoutingModule {}
+export class StudentsRoutingModule { }

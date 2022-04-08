@@ -6,48 +6,17 @@
     <div class="sidebar-brand-text mx-3">CEDIT </div>
   </a>
 
-  <!-- Divider -->
-  <hr class="sidebar-divider my-0">
+  <ng-container *ngFor="let item of menu">
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
 
-  <!-- Nav Item - Dashboard -->
-  <li class="nav-item" routerLinkActive="active">
-    <a class="nav-link" href="index.html">
-      <i class="fas fa-fw fa-tachometer-alt"></i>
-      <span>Dashboard</span></a>
-  </li>
-
-  <!-- Divider -->
-  <hr class="sidebar-divider my-0">
-
-  <li class="nav-item" routerLinkActive="active">
-    <a class="nav-link" routerLink="/usuarios">
-      <i class="fa-solid fa-users"></i>
-      <span>Usuarios</span></a>
-  </li>
-
-  <!-- Divider -->
-  <hr class="sidebar-divider my-0">
-  <li class="nav-item" routerLinkActive="active">
-    <a class="nav-link" routerLink="/cursos">
-      <i class="fa-solid fa-book-open"></i>
-      <span>Cursos</span></a>
-  </li>
-
-  <!-- Divider -->
-  <hr class="sidebar-divider my-0">
-  <li class="nav-item" routerLinkActive="active">
-    <a class="nav-link" routerLink="/alumnos/lista">
-      <i class="fa-solid fa-book-open"></i>
-      <span>Alumnos</span></a>
-  </li>
-
-  <!-- Inscripción -->
-  <hr class="sidebar-divider my-0">
-  <li class="nav-item" routerLinkActive="active">
-    <a class="nav-link" routerLink="/alumnos/inscripcion">
-      <i class="fa-solid fa-book-open"></i>
-      <span>Inscripción</span></a>
-  </li>
+    <!-- Nav Item - Dashboard -->
+    <li *ngIf="item.can" class="nav-item" routerLinkActive="active">
+      <a class="nav-link" [routerLink]="item.route">
+        <i class="fas fa-fw fa-tachometer-alt"></i>
+        <span>{{item.label}}</span></a>
+    </li>
+  </ng-container>
 
   <!-- Divider -->
   <hr class="sidebar-divider my-0">

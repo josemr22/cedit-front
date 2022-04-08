@@ -48,7 +48,7 @@ export class PaymentsComponent implements OnInit {
     private sharedService: SharedService,
     private fb: FormBuilder,
     private activatedRoute: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.sharedService
@@ -57,7 +57,6 @@ export class PaymentsComponent implements OnInit {
     this.courseService.getCourses().subscribe((c) => (this.courses = c));
 
     this.activatedRoute.params.subscribe(({ id }) => {
-      console.log(id);
       if (id == 'nuevo') {
         this.selectedStudentWithCourse = undefined;
         this.form.reset();

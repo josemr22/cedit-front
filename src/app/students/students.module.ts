@@ -12,9 +12,11 @@ import { OperationsComponent } from './components/operations/operations.componen
 import { InscriptionListComponent } from './components/inscription-list/inscription-list.component';
 import { InscriptionFormComponent } from './components/inscription-form/inscription-form.component';
 import { PayFormComponent } from './components/pay-form/pay-form.component';
+import { InformsListComponent } from './informs-list/informs-list.component';
+import { InformsFormComponent } from './informs-form/informs-form.component';
 
 @NgModule({
-  declarations: [IndexComponent, StudentsListComponent, PaymentsComponent, PaymentsTableComponent, OperationsComponent, InscriptionListComponent, InscriptionFormComponent, PayFormComponent],
+  declarations: [IndexComponent, StudentsListComponent, PaymentsComponent, PaymentsTableComponent, OperationsComponent, InscriptionListComponent, InscriptionFormComponent, PayFormComponent, InformsListComponent, InformsFormComponent],
   imports: [
     CommonModule,
     StudentsRoutingModule,
@@ -23,4 +25,4 @@ import { PayFormComponent } from './components/pay-form/pay-form.component';
     FormsModule,
   ],
 })
-export class StudentsModule {}
+export class StudentsModule { }

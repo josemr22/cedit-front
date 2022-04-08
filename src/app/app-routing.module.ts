@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './shared/login/login.component';
 import { MainLayoutComponent } from './shared/main-layout/main-layout.component';
 import { DashboardComponent } from './shared/dashboard/dashboard.component';
 import { AuthGuard } from './auth/guards/auth.guard';
@@ -19,15 +18,18 @@ const routes: Routes = [
     path: '',
     component: MainLayoutComponent,
     canLoad: [AuthGuard],
-    canActivate: [AuthGuard],
     children: [
       {
+        canActivate: [AuthGuard],
         path: 'usuarios',
+        data: { menu: 'users' },
         loadChildren: () =>
           import('./users/users.module').then((m) => m.UsersModule),
       },
       {
+        canActivate: [AuthGuard],
         path: 'cursos',
+        data: { menu: 'courses' },
         loadChildren: () =>
           import('./courses/courses.module').then((m) => m.CoursesModule),
       },
@@ -37,13 +39,22 @@ const routes: Routes = [
           import('./students/students.module').then((m) => m.StudentsModule),
       },
       {
+        canActivate: [AuthGuard],
         path: 'caja',
         loadChildren: () =>
           import('./till/till.module').then((m) => m.TillModule),
+        data: { menu: 'till' },
       },
       {
+        path: 'ventas',
+        loadChildren: () =>
+          import('./sales/sales.module').then((m) => m.SalesModule),
+      },
+      {
+        canActivate: [AuthGuard],
         path: 'dashboard',
-        component: DashboardComponent
+        component: DashboardComponent,
+        data: { menu: 'dashbaord' },
       },
       {
         path: '**',

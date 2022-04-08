@@ -1,0 +1,47 @@
+<h1 class="h3 mb-4 text-gray-800">Caja</h1>
+<div class="container">
+  <div class="col-lg-12 border-bottom-primary">
+    <div class="card shadow mb-4">
+      <div class="card-body">
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button routerLink="/caja/comprobantes" routerLinkActive="active" class="nav-link" id="pills-home-tab"
+              data-bs-toggle="pill" data-bs-target="#crearCurso" type="button" role="tab" aria-controls="crearCurso"
+              aria-selected="true">Comprobantes</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button routerLink="/caja/gastos" routerLinkActive="active" class="nav-link" id="agregar-tab"
+              data-bs-toggle="pill" data-bs-target="#agregar" type="button" role="tab" aria-controls="agregar"
+              aria-selected="false">Gastos</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button routerLink="/caja/reportes" routerLinkActive="active" class="nav-link" id="editarCurso-tab"
+              data-bs-toggle="pill" data-bs-target="#editarCurso" type="button" role="tab" aria-controls="editarCurso"
+              aria-selected="false">Reportes</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button routerLink="/caja/produccion-por-usuario" routerLinkActive="active" class="nav-link"
+              id="editarTurno-tab" data-bs-toggle="pill" data-bs-target="#editarTurno" type="button" role="tab"
+              aria-controls="editarTurno" aria-selected="false">Producción por usuario</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button routerLink="/caja/reporte-por-banco" routerLinkActive="active" class="nav-link" id="editarTurno-tab"
+              data-bs-toggle="pill" data-bs-target="#editarTurno" type="button" role="tab" aria-controls="editarTurno"
+              aria-selected="false">Reporte por banco</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button routerLink="/caja/notas-de-credito" routerLinkActive="active" class="nav-link" id="editarTurno-tab"
+              data-bs-toggle="pill" data-bs-target="#editarTurno" type="button" role="tab" aria-controls="editarTurno"
+              aria-selected="false">Notas de crédito</button>
+          </li>
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+
+          <router-outlet></router-outlet>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

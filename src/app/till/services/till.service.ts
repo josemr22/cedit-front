@@ -1,7 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Installment } from '../interfaces/installment.interface';
+import { UserProduction } from '../interfaces/user-production.interface';
+import { BankReport } from '../interfaces/bank-report';
 
 const apiUrl = environment.apiUrl;
 
@@ -9,7 +11,7 @@ const apiUrl = environment.apiUrl;
   providedIn: 'root',
 })
 export class TillService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getInstallment(id: number) {
     return this.http.get<Installment>(`${apiUrl}/installments/${id}`);
@@ -19,6 +21,24 @@ export class TillService {
     return this.http.post<Installment>(
       `${apiUrl}/till/pay-installment/${installmentId}`,
       data
+    );
+  }
+
+  getUserProductionList(params: HttpParams) {
+    return this.http.get<UserProduction[]>(
+      `${apiUrl}/till/production-by-user`,
+      {
+        params
+      }
+    );
+  }
+
+  getBankReportList(params: HttpParams) {
+    return this.http.get<BankReport[]>(
+      `${apiUrl}/till/bank-report`,
+      {
+        params
+      }
     );
   }
 }

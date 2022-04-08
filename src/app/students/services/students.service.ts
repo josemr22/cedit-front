@@ -20,8 +20,8 @@ export class StudentsService {
     return this.http.get<Student>(`${apiUrl}/students/${id}`);
   }
 
-  getStudents() {
-    return this.http.get<Student[]>(`${apiUrl}/students`);
+  getStudents(params: HttpParams = new HttpParams()) {
+    return this.http.get<Student[]>(`${apiUrl}/students`, { params });
   }
 
   storeStudent(data: StudentDto) {

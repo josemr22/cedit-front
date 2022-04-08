@@ -6,6 +6,7 @@ import { Installment, Student } from '../../interfaces/installment.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TillService } from '../../services/till.service';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-pay-form',
@@ -24,7 +25,7 @@ export class PayFormComponent implements OnInit {
     transaction: this.fb.group({
       bank_id: [null, [Validators.required]],
       operation: [null, []],
-      user_id: [1, []],
+      user_id: [this.authService.getUser().id, []],
       name: [null, []],
       payment_date: [null, []],
     }),
@@ -35,8 +36,9 @@ export class PayFormComponent implements OnInit {
     private sharedService: SharedService,
     private activatedRoute: ActivatedRoute,
     private tillService: TillService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private authService: AuthService,
+  ) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(({ id }) => {
