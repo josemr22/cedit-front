@@ -84,7 +84,7 @@ export class SaleFormComponent implements OnInit {
         this.router.navigateByUrl('/ventas/uniformes');
         return;
       }
-      this.saleTypeLabel = saleTypeObj.label.toUpperCase();
+      this.saleTypeLabel = saleTypeObj.label;
       this.form.get('type')!.setValue(saleTypeObj!.code);
     });
     this.sharedService.getBanks().subscribe((b) => {
@@ -158,11 +158,15 @@ export class SaleFormComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
+    if (this.form.get('payment.amount')!.value < this.form.get('payment.pay_amount')!.value) {
+      Swal.fire('Ups!', 'El monto a pagar no puede ser mayor al monto', 'error');
+      return;
+    }
     const data = { ...this.form.value };
     delete data.student;
     this.saleService.storeSale(data).subscribe(_ => {
       Swal.fire('Bien Hecho', 'Venta realizada', 'success');
-      this.router.navigateByUrl(`/ventas/${this.saleType}`);
+      this.router.navigate(['ventas', this.saleTypeLabel]);
     });
   }
 

@@ -12,8 +12,10 @@ import Swal from 'sweetalert2';
 })
 export class LoginComponent implements OnInit {
 
+  loading = false;
+
   form: FormGroup = this.fb.group({
-    email: ['Admin', [Validators.required]],
+    user: ['Admin', [Validators.required]],
     password: ['password', [Validators.required]],
   });
 
@@ -31,12 +33,17 @@ export class LoginComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
+    Swal.fire({
+      allowOutsideClick: false,
+    })
+    Swal.showLoading();
     this.authService.login(this.form.value).subscribe({
       next: _ => {
-        this.router.navigateByUrl("/dashboard")
+        Swal.fire('Bien Hecho!', 'Bienvenido!', 'success');
+        this.router.navigateByUrl("/dashboard");
       },
       error: () => {
-        Swal.fire('Ocurrió un error', 'No se reconoces las credenciales introducidas', 'error')
+        Swal.fire('Ocurrió un error', 'No se reconoce las credenciales introducidas', 'error');
       }
     });
   }

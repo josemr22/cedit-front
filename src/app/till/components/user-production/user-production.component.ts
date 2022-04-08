@@ -44,7 +44,7 @@ export class UserProductionComponent implements OnInit {
 
   get userProductionList() {
     return this._userProductionList.map((up) => ({
-      user: up.user.email,
+      user: up.user.user,
       name: up.user.name,
       amount: up.amount.toFixed(2),
     }));

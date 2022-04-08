@@ -13,7 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class UserFormComponent implements OnInit {
   form: FormGroup = this.fb.group({
     name: [null, [Validators.required]],
-    email: [null, [Validators.required]],
+    user: [null, [Validators.required]],
     role: [null, [Validators.required]],
     password: [null, [Validators.required, Validators.minLength(6)]],
   });
@@ -26,7 +26,7 @@ export class UserFormComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private activatedRoute: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.userService.getRoles().subscribe((rs) => (this.roles = rs));
@@ -42,7 +42,7 @@ export class UserFormComponent implements OnInit {
             ?.removeValidators([Validators.required, Validators.minLength(6)]);
           this.form.reset({
             name: u.name,
-            email: u.email,
+            user: u.user,
             role: u.roles[0]?.name,
             password: '',
           });

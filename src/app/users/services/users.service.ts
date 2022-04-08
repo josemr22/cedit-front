@@ -8,7 +8,7 @@ const apiUrl = environment.apiUrl;
 
 export type UserForm = {
   name: string;
-  email: string;
+  user: string;
   password: string;
   role: string;
 };
@@ -17,7 +17,7 @@ export type UserForm = {
   providedIn: 'root',
 })
 export class UsersService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getUsers() {
     return this.http.get<User[]>(`${apiUrl}/users`);

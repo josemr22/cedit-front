@@ -1,8 +1,8 @@
 <form (ngSubmit)="login()" [formGroup]="form">
   <div>
-    <label for="email">Usuario:</label>
-    <input formControlName="email" type="text" id="email">
-    <span *ngIf="isInvalid('email')" class="text-danger">El campo es requerido</span>
+    <label for="user">Usuario:</label>
+    <input formControlName="user" type="text" id="user">
+    <span *ngIf="isInvalid('user')" class="text-danger">El campo es requerido</span>
   </div>
   <div>
     <label for="password">Contraseña:</label>

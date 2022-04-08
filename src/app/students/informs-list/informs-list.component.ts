@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import * as FileSaver from 'file-saver';
 import Swal from 'sweetalert2';
 import { Student } from '../interfaces/student.interface';
 import { StudentsService } from '../services/students.service';
 import { HttpParams } from '@angular/common/http';
+import { exportExcel, exportPdf } from "../../helpers/exports";
 
 @Component({
   selector: 'app-informs-list',
@@ -37,10 +37,10 @@ export class InformsListComponent implements OnInit {
       { field: 'registered_by', header: 'Registrado por' },
     ];
 
-    this.exportColumns = this.cols.map((col) => ({
-      title: col.header,
-      dataKey: col.field,
-    }));
+    // this.exportColumns = this.cols.map((col) => ({
+    //   title: col.header,
+    //   dataKey: col.field,
+    // }));
   }
 
   get students() {
@@ -65,34 +65,12 @@ export class InformsListComponent implements OnInit {
     });
   }
 
-  // Exports
+  exportExcel() {
+    exportExcel([...this.students], [...this.cols], 'informes');
+  }
 
   exportPdf() {
-    console.log('pdf');
+    exportPdf();
   }
 
-  exportExcel() {
-    import('xlsx').then((xlsx) => {
-      const worksheet = xlsx.utils.json_to_sheet(this.students);
-      const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
-      const excelBuffer: any = xlsx.write(workbook, {
-        bookType: 'xlsx',
-        type: 'array',
-      });
-      this.saveAsExcelFile(excelBuffer, 'usuarios');
-    });
-  }
-
-  saveAsExcelFile(buffer: any, fileName: string): void {
-    let EXCEL_TYPE =
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-    let EXCEL_EXTENSION = '.xlsx';
-    const data: Blob = new Blob([buffer], {
-      type: EXCEL_TYPE,
-    });
-    FileSaver.saveAs(
-      data,
-      fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION
-    );
-  }
 }

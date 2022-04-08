@@ -31,8 +31,10 @@
         {{rowData[col.field]}}
       </td>
       <td>
-        <a *ngIf="rowData.installment_id" class="btn btn-danger"
+        <a *ngIf="btnPayIsVisible(rowData)" class="btn btn-danger"
           [routerLink]="'/caja/pagar/'+rowData.installment_id">Pagar</a>
+        <a href="http://cixsolution.com" target="_blank" *ngIf="btnSeeVoucherIsVisible(rowData)"
+          class="btn btn-primary">Compr</a>
       </td>
     </tr>
   </ng-template>

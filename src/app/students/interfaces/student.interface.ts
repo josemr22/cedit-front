@@ -44,7 +44,7 @@ export interface CourseTurn {
 export interface RegisteredBy {
   id: number;
   name: string;
-  email: string;
+  user: string;
   email_verified_at: string;
   created_at: string;
   updated_at: string;

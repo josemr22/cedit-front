@@ -28,7 +28,7 @@ export class IndexComponent implements OnInit {
     this.cols = [
       { field: 'id', header: 'Id' },
       { field: 'name', header: 'Nombre' },
-      { field: 'email', header: 'Usuario' },
+      { field: 'user', header: 'Usuario' },
       { field: 'role', header: 'Rol' },
     ];
 
@@ -42,7 +42,7 @@ export class IndexComponent implements OnInit {
     return this._users.map((user) => ({
       id: user.id,
       name: user.name,
-      email: user.email,
+      user: user.user,
       role: user.roles[0]?.name,
     }));
   }

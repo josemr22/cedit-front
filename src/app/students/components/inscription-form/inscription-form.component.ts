@@ -192,7 +192,6 @@ export class InscriptionFormComponent implements OnInit {
     amount += this.form.get('payment.enroll_amount')!.value ?? 0;
     this.installments.controls.forEach((element) => {
       amount += element.get('amount')?.value ?? 0;
-      console.log('h');
     });
     this.form.get('payment.amount')!.setValue(amount);
   }
@@ -276,6 +275,16 @@ export class InscriptionFormComponent implements OnInit {
     this.form.markAllAsTouched();
     if (this.form.invalid) {
       return;
+    }
+    if (this.form.get('payment.type')!.value == '0') {
+      if (this.form.get('payment.pay_enroll_amount')!.value > this.form.get('payment.enroll_amount')!.value) {
+        Swal.fire('Ups!', 'El monto a pagar de matrícula no puede ser mayor al monto de matrícula', 'error');
+        return;
+      }
+      if ((this.form.get('payment.installments') as FormArray).value[0].amount < (this.form.get('payment.installments') as FormArray).value[0].pay) {
+        Swal.fire('Ups!', 'El monto a pagar de la mensualidad 1 no puede ser mayor al monto de la mensualidad 1', 'error');
+        return;
+      }
     }
     const data = this.form.value;
     if (this.student) {

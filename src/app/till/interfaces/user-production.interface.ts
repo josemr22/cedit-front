@@ -8,5 +8,5 @@ export interface UserProduction {
 export interface User {
     id: number;
     name: string;
-    email: string;
+    user: string;
 }

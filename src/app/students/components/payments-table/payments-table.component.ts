@@ -112,4 +112,12 @@ export class PaymentsTableComponent implements OnInit, OnChanges {
       });
     });
   }
+
+  btnPayIsVisible(rowData: any) {
+    return rowData.installment_id && rowData.balance != 0;
+  }
+
+  btnSeeVoucherIsVisible(rowData: any) {
+    return rowData.type == 'd';
+  }
 }

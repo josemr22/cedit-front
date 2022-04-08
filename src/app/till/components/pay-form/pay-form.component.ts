@@ -46,6 +46,8 @@ export class PayFormComponent implements OnInit {
         (i) => {
           this.installment = i;
           this.student = this.installment.payment.course_turn_student.student;
+          this.form.get('amount')?.setValidators(Validators.max(this.installment.balance));
+          this.form.get('amount')?.updateValueAndValidity();
         },
         (_) => this.router.navigateByUrl('/alumnos/lista')
       );

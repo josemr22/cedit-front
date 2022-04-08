@@ -1,1 +1,26 @@
-<p>dashboard works!</p>
+<div class="row" *ngIf="data">
+  <div class="col-6 col-md-3 card">
+    <div class="card-body">
+      <h3>Inscripciones Pendientes</h3>
+      <span>{{data.pendingInscriptions}}</span>
+    </div>
+  </div>
+  <div class="col-6 col-md-3 card">
+    <div class="card-body">
+      <h3>Alumnos Registrados</h3>
+      <span>{{data.registeredStudents}}</span>
+    </div>
+  </div>
+  <div class="col-6 col-md-3 card">
+    <div class="card-body">
+      <h3>Comprobantes Registrados</h3>
+      <span>{{data.recordedVouchers}}</span>
+    </div>
+  </div>
+  <div class="col-6 col-md-3 card">
+    <div class="card-body">
+      <h3>Créditos</h3>
+      <span>{{data.credits}}</span>
+    </div>
+  </div>
+</div>
