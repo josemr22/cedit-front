@@ -3,7 +3,7 @@ import Swal from 'sweetalert2';
 import { Student } from '../interfaces/student.interface';
 import { StudentsService } from '../services/students.service';
 import { HttpParams } from '@angular/common/http';
-import { exportExcel, exportPdf } from "../../helpers/exports";
+import { exportTable } from "../../helpers/exports";
 
 @Component({
   selector: 'app-informs-list',
@@ -13,7 +13,6 @@ import { exportExcel, exportPdf } from "../../helpers/exports";
 export class InformsListComponent implements OnInit {
   _students: Student[] = [];
   cols!: any[];
-  exportColumns!: any[];
 
   isLoading: boolean = true;
 
@@ -36,11 +35,6 @@ export class InformsListComponent implements OnInit {
       { field: 'registered_at', header: 'Fecha de Registro' },
       { field: 'registered_by', header: 'Registrado por' },
     ];
-
-    // this.exportColumns = this.cols.map((col) => ({
-    //   title: col.header,
-    //   dataKey: col.field,
-    // }));
   }
 
   get students() {
@@ -65,12 +59,7 @@ export class InformsListComponent implements OnInit {
     });
   }
 
-  exportExcel() {
-    exportExcel([...this.students], [...this.cols], 'informes');
+  export(type: string) {
+    exportTable(type, [...this.students], [...this.cols], 'informes');
   }
-
-  exportPdf() {
-    exportPdf();
-  }
-
 }

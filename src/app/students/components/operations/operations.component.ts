@@ -15,13 +15,12 @@ export class OperationsComponent implements OnInit {
   banks: Bank[] = [];
 
   cols!: any[];
-  exportColumns!: any[];
   data: any[] = [];
 
   constructor(
     private studentService: StudentsService,
     private sharedService: SharedService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.sharedService.getBanks().subscribe((b) => (this.banks = b));
@@ -31,11 +30,6 @@ export class OperationsComponent implements OnInit {
       { field: 'voucher', header: 'Comprobante' },
       { field: 'responsable', header: 'Registrado por' },
     ];
-
-    this.exportColumns = this.cols.map((col) => ({
-      title: col.header,
-      dataKey: col.field,
-    }));
   }
 
   changeBank(event: Event) {
@@ -54,23 +48,12 @@ export class OperationsComponent implements OnInit {
         console.log(operations);
         this.operations = operations;
         this.operations.forEach((o) => {
-          if (o.payment) {
-            this.data.push({
-              courseTurnStudentId: o.payment.course_turn_student.id,
-              name: o.payment.course_turn_student.student.name,
-              voucher: o.payment.voucher,
-              responsable: o.responsable.name,
-            });
-          } else {
-            this.data.push({
-              courseTurnStudentId:
-                o.damping?.installment.payment.course_turn_student.id,
-              name: o.damping?.installment.payment.course_turn_student.student
-                .name,
-              voucher: o.damping?.voucher,
-              responsable: o.responsable.name,
-            });
-          }
+          this.data.push({
+            courseTurnStudentId: o.dampings[0].installment.payment.course_turn_student.id,
+            name: o.dampings[0].installment.payment.course_turn_student.student.name,
+            voucher: o.dampings[0].voucher,
+            responsable: o.responsable.name,
+          });
         });
       });
   }

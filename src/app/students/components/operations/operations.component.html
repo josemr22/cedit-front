@@ -21,9 +21,6 @@
     [exportHeader]="'customExportHeader'">
     <ng-template pTemplate="header" let-columns>
       <tr>
-        <!-- <th *ngFor="let col of columns">
-      {{col.header}}
-    </th> -->
         <th *ngFor="let col of columns">
           <div class="flex justify-content-between align-items-center">
             {{col.header}}

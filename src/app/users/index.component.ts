@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { User } from './interfaces/user.interface';
 import { UsersService } from './services/users.service';
-import * as FileSaver from 'file-saver';
+import { exportTable } from '../helpers/exports';
 
 @Component({
   selector: 'app-index',
@@ -13,7 +13,6 @@ export class IndexComponent implements OnInit {
 
   _users: User[] = [];
   cols!: any[];
-  exportColumns!: any[];
 
   isLoading: boolean = true;
 
@@ -26,16 +25,10 @@ export class IndexComponent implements OnInit {
     });
 
     this.cols = [
-      { field: 'id', header: 'Id' },
       { field: 'name', header: 'Nombre' },
       { field: 'user', header: 'Usuario' },
       { field: 'role', header: 'Rol' },
     ];
-
-    this.exportColumns = this.cols.map((col) => ({
-      title: col.header,
-      dataKey: col.field,
-    }));
   }
 
   get users() {
@@ -55,43 +48,7 @@ export class IndexComponent implements OnInit {
     });
   }
 
-  exportPdf() {
-    // import('jspdf').then((jsPDF) => {
-    //   import('jspdf-autotable').then((x) => {
-    //     const doc = new jsPDF.default('portrait', 'px');
-    //     doc.autoTable(this.exportColumns, this.users);
-    //     doc.save('products.pdf');
-    //   });
-    // });
-    console.log('pdf');
-  }
-
-  exportExcel() {
-    import('xlsx').then((xlsx) => {
-      const data = this.users.map((u) => {
-        const { id, ...rest } = u;
-        return rest;
-      });
-      const worksheet = xlsx.utils.json_to_sheet(data);
-      const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
-      const excelBuffer: any = xlsx.write(workbook, {
-        bookType: 'xlsx',
-        type: 'array',
-      });
-      this.saveAsExcelFile(excelBuffer, 'usuarios');
-    });
-  }
-
-  saveAsExcelFile(buffer: any, fileName: string): void {
-    let EXCEL_TYPE =
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-    let EXCEL_EXTENSION = '.xlsx';
-    const data: Blob = new Blob([buffer], {
-      type: EXCEL_TYPE,
-    });
-    FileSaver.saveAs(
-      data,
-      fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION
-    );
+  export(type: string) {
+    exportTable(type, [...this.users], [...this.cols], 'usuarios');
   }
 }
