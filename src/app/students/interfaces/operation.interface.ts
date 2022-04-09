@@ -7,6 +7,7 @@ export interface Operation {
   bank_id: number;
   user_id: number;
   operation: string;
+  voucher: string;
   created_at: string;
   updated_at: string;
   bank: Bank;
@@ -25,7 +26,6 @@ export interface Bank {
 export interface Damping {
   id: number;
   amount: number;
-  voucher: string;
   transaction_id: number;
   installment_id: number;
   created_at: string;

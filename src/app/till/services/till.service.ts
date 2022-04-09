@@ -4,6 +4,8 @@ import { environment } from 'src/environments/environment';
 import { Installment } from '../interfaces/installment.interface';
 import { UserProduction } from '../interfaces/user-production.interface';
 import { BankReport } from '../interfaces/bank-report';
+import { Voucher } from '../interfaces/voucher.interface';
+import { Report } from '../interfaces/report.interface';
 
 const apiUrl = environment.apiUrl;
 
@@ -36,6 +38,24 @@ export class TillService {
   getBankReportList(params: HttpParams) {
     return this.http.get<BankReport[]>(
       `${apiUrl}/till/bank-report`,
+      {
+        params
+      }
+    );
+  }
+
+  getVouchers(params: HttpParams) {
+    return this.http.get<Voucher[]>(
+      `${apiUrl}/till/vouchers`,
+      {
+        params
+      }
+    );
+  }
+
+  getReports(params: HttpParams) {
+    return this.http.get<Report[]>(
+      `${apiUrl}/till/reports`,
       {
         params
       }

@@ -18,7 +18,6 @@ export interface Payment {
   id: number;
   amount: number;
   type: number;
-  voucher: null;
   observation: null;
   transaction_id: null;
   created_at: string;

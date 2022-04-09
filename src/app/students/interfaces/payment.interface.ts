@@ -29,7 +29,6 @@ export interface Installment {
 export interface Damping {
   id: number;
   amount: number;
-  voucher: string;
   transaction_id: number;
   installment_id: number;
   created_at: string;

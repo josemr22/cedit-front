@@ -51,7 +51,7 @@ export class OperationsComponent implements OnInit {
           this.data.push({
             courseTurnStudentId: o.dampings[0].installment.payment.course_turn_student.id,
             name: o.dampings[0].installment.payment.course_turn_student.student.name,
-            voucher: o.dampings[0].voucher,
+            voucher: o.voucher,
             responsable: o.responsable.name,
           });
         });
