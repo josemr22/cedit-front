@@ -164,7 +164,8 @@ export class SaleFormComponent implements OnInit {
     }
     const data = { ...this.form.value };
     delete data.student;
-    this.saleService.storeSale(data).subscribe(_ => {
+    this.saleService.storeSale(data).subscribe(transactionResponse => {
+      console.log(transactionResponse);
       Swal.fire('Bien Hecho', 'Venta realizada', 'success');
       this.router.navigate(['ventas', this.saleTypeLabel]);
     });

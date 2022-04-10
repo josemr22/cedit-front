@@ -21,8 +21,8 @@ export class PayFormComponent implements OnInit {
 
   form: FormGroup = this.fb.group({
     amount: [0, [Validators.required]],
-    voucher_type: ['R', [Validators.required]],
     transaction: this.fb.group({
+      voucher_type: ['R', [Validators.required]],
       bank_id: [null, [Validators.required]],
       operation: [null, []],
       user_id: [this.authService.getUser().id, []],
@@ -30,6 +30,10 @@ export class PayFormComponent implements OnInit {
       payment_date: [null, []],
     }),
   });
+
+  onChangeVoucherType(value: string) {
+    this.form.get('transaction.voucher_type')!.setValue(value);
+  }
 
   constructor(
     private fb: FormBuilder,

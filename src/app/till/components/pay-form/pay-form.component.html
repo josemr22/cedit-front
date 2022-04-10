@@ -38,12 +38,12 @@
             <tr>
               <td>{{date | date:"dd-MM-yyyy"}}</td>
               <td>
-                <select class="form-control" formControlName="voucher_type">
+                <select class="form-control" #vt (change)="onChangeVoucherType(vt.value)">
                   <option value="R">Recibo</option>
                   <option value="B">Boleta</option>
                   <option value="F">Factura</option>
                 </select>
-                <span *ngIf="isInvalid('voucher_type')" class="text-danger text-form">El campo es requerido</span>
+                <!-- <span *ngIf="isInvalid('voucher_type')" class="text-danger text-form">El campo es requerido</span> -->
               </td>
             </tr>
           </tbody>

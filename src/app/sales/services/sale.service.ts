@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Sale } from '../interfaces/sale.interface';
+import { TransactionResponse } from '../interfaces/transaction-response.interface';
 
 const apiUrl = environment.apiUrl;
 
@@ -26,6 +27,6 @@ export class SaleService {
   }
 
   storeSale(data: any) {
-    return this.http.post<any>(`${apiUrl}/sales`, data);
+    return this.http.post<TransactionResponse>(`${apiUrl}/sales`, data);
   }
 }

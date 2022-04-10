@@ -58,6 +58,7 @@ export class InscriptionFormComponent implements OnInit {
       ]),
     }),
     transaction: this.fb.group({
+      voucher_type: [null, [Validators.required]],
       bank_id: [null, [Validators.required]],
       operation: [null, []],
       user_id: [this.authService.getUser().id, []],
@@ -150,6 +151,7 @@ export class InscriptionFormComponent implements OnInit {
             ],
           },
           transaction: {
+            voucher_type: null,
             bank_id: null,
             operation: null,
             user_id: this.authService.getUser().id,
