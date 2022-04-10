@@ -54,7 +54,7 @@ export class TillService {
   }
 
   getReports(params: HttpParams) {
-    return this.http.get<Report[]>(
+    return this.http.get<Report>(
       `${apiUrl}/till/reports`,
       {
         params

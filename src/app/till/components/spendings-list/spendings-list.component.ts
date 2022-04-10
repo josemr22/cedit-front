@@ -5,6 +5,7 @@ import * as FileSaver from 'file-saver';
 import { Spending } from '../../interfaces/spending.interface';
 import { SpendingService } from '../../services/spending.service';
 import Swal from 'sweetalert2';
+import { exportTable } from 'src/app/helpers/exports';
 
 @Component({
   selector: 'app-spendings-list',
@@ -17,7 +18,6 @@ export class SpendingsListComponent implements OnInit {
   _spendings: Spending[] = [];
 
   cols!: any[];
-  exportColumns!: any[];
 
   filters: FormGroup = this.fb.group({
     from: [null, Validators.required],
@@ -38,11 +38,6 @@ export class SpendingsListComponent implements OnInit {
       { field: 'amount', header: 'Monto' },
       { field: 'user', header: 'Usuario' },
     ];
-
-    this.exportColumns = this.cols.map((col) => ({
-      title: col.header,
-      dataKey: col.field,
-    }));
   }
 
   get spendings() {
@@ -78,39 +73,7 @@ export class SpendingsListComponent implements OnInit {
     });
   }
 
-  // Exports
-
-  exportPdf() {
-    console.log('pdf');
+  export(type: string) {
+    exportTable(type, [...this.spendings], [...this.cols], 'gastos');
   }
-
-  exportExcel() {
-    import('xlsx').then((xlsx) => {
-      const data = this.spendings.map((u) => {
-        const { id, ...rest } = u;
-        return rest;
-      });
-      const worksheet = xlsx.utils.json_to_sheet(data);
-      const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
-      const excelBuffer: any = xlsx.write(workbook, {
-        bookType: 'xlsx',
-        type: 'array',
-      });
-      this.saveAsExcelFile(excelBuffer, 'usuarios');
-    });
-  }
-
-  saveAsExcelFile(buffer: any, fileName: string): void {
-    let EXCEL_TYPE =
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-    let EXCEL_EXTENSION = '.xlsx';
-    const data: Blob = new Blob([buffer], {
-      type: EXCEL_TYPE,
-    });
-    FileSaver.saveAs(
-      data,
-      fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION
-    );
-  }
-
 }

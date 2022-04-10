@@ -49,9 +49,9 @@
               <div class="d-flex justify-content-between">
                 <a routerLink="/caja/gastos/nuevo" href="#" class="btn btn-primary">+</a>
                 <div>
-                  <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+                  <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="export('xlsx')"
                     class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
-                  <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()"
+                  <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="export('pdf')"
                     class="p-button-warning mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
                   <!-- <button type="button" pButton pRipple icon="pi pi-filter" (click)="dt.exportCSV({selectionOnly:true})"
                    class="p-button-info ml-auto" pTooltip="Selection Only" tooltipPosition="bottom"></button> -->

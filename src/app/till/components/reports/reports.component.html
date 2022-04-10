@@ -1,1 +1,92 @@
-<p>reports works!</p>
+<div class="tab-pane fade show active" id="tabAlumnos" role="tabpanel" aria-labelledby="tabAlumnos-tab">
+  <form (ngSubmit)="search()" [formGroup]="filters">
+    <div class="row">
+      <div class="col-2 d-flex" style="flex-direction: column;">
+        <div class="text-center mb-1 fw-bold badge bg-primary text-wra">
+          Desde
+        </div>
+        <div>
+          <div class="input-group mb-3">
+            <input type="date" formControlName="from" class="form-control" aria-describedby="basic-addon1">
+          </div>
+        </div>
+      </div>
+      <div class="col-2 d-flex" style="flex-direction: column;">
+        <div class="text-center mb-1 fw-bold badge bg-primary text-wra">
+          Hasta
+        </div>
+        <div>
+          <div class="input-group mb-3">
+            <input type="date" formControlName="to" class="form-control" aria-describedby="basic-addon1">
+          </div>
+        </div>
+      </div>
+      <div class="col-2 d-flex" style="flex-direction: column;">
+        <div class="text-center mb-1 fw-bold badge bg-primary text-wra">
+          Acción
+        </div>
+        <div>
+          <button type="submit" [disabled]="filters.invalid"
+            class="btn btn-danger d-flex w-100 text-center justify-content-center">
+            Buscar</button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="row">
+    <div *ngFor="let item of totales" class="col-6 col-md-3">
+      <p>{{item.label}}</p>
+      <p>S/ {{item.amount}}</p>
+    </div>
+  </div>
+
+  <div class="mt-4 col-lg-12">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Tabla
+        </h6>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <p-table [loading]="isLoading" #dt [columns]="cols" [paginator]="true" [value]="vouchers"
+            responsiveLayout="scroll" dataKey="id" [exportHeader]="'customExportHeader'"
+            [rowsPerPageOptions]="[10,25,50]" [rows]="10">
+            <ng-template pTemplate="caption">
+              <div class="d-flex justify-content-between">
+                <a routerLink="/caja/gastos/nuevo" href="#" class="btn btn-primary">+</a>
+                <div>
+                  <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="export('xlsx')"
+                    class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
+                  <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="export('pdf')"
+                    class="p-button-warning mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
+                </div>
+              </div>
+              <div class="table-header mt-3 d-flex justify-content-end">
+                <input pInputText type="text" (input)="dt.filterGlobal($any($event.target!).value, 'contains')"
+                  placeholder="Buscar..." />
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                  <div class="flex justify-content-between align-items-center">
+                    {{col.header}}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                  </div>
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+              <tr [pSelectableRow]="rowData">
+                <td *ngFor="let col of columns">
+                  {{rowData[col.field]}}
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
