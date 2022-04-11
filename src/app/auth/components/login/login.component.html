@@ -1,13 +1,30 @@
-<form (ngSubmit)="login()" [formGroup]="form">
-  <div>
-    <label for="user">Usuario:</label>
-    <input formControlName="user" type="text" id="user">
-    <span *ngIf="isInvalid('user')" class="text-danger">El campo es requerido</span>
+<div class="contenedor area">
+  <ul class="circles">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+  </ul>
+  <div class="d-flex flex-column justify-content-center align-items-center h-20">
+    <img src="/assets/img/cedit-logo.png" class="w-50" alt="" srcset="">
   </div>
-  <div>
-    <label for="password">Contraseña:</label>
-    <input formControlName="password" type="password" id="password">
-    <span *ngIf="isInvalid('password')" class="text-danger">El campo es requerido</span>
-  </div>
-  <button type="submit">Iniciar Sesión</button>
-</form>
+  <form (ngSubmit)="login()" [formGroup]="form">
+    <div class="form-floating mb-3">
+      <input formControlName="user" type="text" class="form-control" id="user" placeholder="name@example.com">
+      <label for="user">Usuario</label>
+      <span *ngIf="isInvalid('user')" class="text-danger">El campo es requerido</span>
+    </div>
+    <div class="form-floating">
+      <input formControlName="password" type="password" class="form-control" id="password" placeholder="Password">
+      <label for="password">Contraseña</label>
+      <span *ngIf="isInvalid('password')" class="text-danger">El campo es requerido</span>
+    </div>
+    <button type="submit" class="btn btn-danger w-100 mt-2 position-relative">Iniciar sesión</button>
+  </form>
+</div>
