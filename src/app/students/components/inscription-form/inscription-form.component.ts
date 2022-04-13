@@ -158,8 +158,17 @@ export class InscriptionFormComponent implements OnInit {
             payment_date: null,
           },
         });
+
+        this.courseService.getTurns(s.course_id).subscribe((ct) => {
+          this.courseTurns = ct;
+          if (this.courseTurns.length) {
+            this.form.get('course_turn_id')!.setValue(this.courseTurns[0].id);
+          }
+        });
+
       });
     });
+
 
     this.sharedService.getDepartments().subscribe((d) => {
       this.departments = d;

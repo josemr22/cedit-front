@@ -9,6 +9,7 @@ import { InscriptionFormComponent } from './components/inscription-form/inscript
 import { InformsListComponent } from './informs-list/informs-list.component';
 import { InformsFormComponent } from './informs-form/informs-form.component';
 import { AuthGuard } from '../auth/guards/auth.guard';
+import { EditStudentWithCourseComponent } from './components/edit-student-with-course/edit-student-with-course.component';
 
 const routes: Routes = [
   {
@@ -47,6 +48,10 @@ const routes: Routes = [
           {
             path: 'lista',
             component: StudentsListComponent,
+          },
+          {
+            path: 'editar/:id',
+            component: EditStudentWithCourseComponent,
           },
           {
             path: 'pagos/:id',

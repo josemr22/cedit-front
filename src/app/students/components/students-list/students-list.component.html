@@ -106,7 +106,7 @@
                   {{rowData[col.field]}}
                 </td>
                 <td>
-                  <button [routerLink]="['/usuarios', rowData.id]" pButton type="button" icon="pi pi-pencil"
+                  <button [routerLink]="['/alumnos/editar', rowData.id]" pButton type="button" icon="pi pi-pencil"
                     class="p-button-sm mr-1"></button>
                   <button (click)="delete(rowData.id)" pButton type="button" icon="pi pi-trash"
                     class="p-button-sm p-button-danger"></button>

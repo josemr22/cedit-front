@@ -14,9 +14,11 @@ import { InscriptionFormComponent } from './components/inscription-form/inscript
 import { PayFormComponent } from './components/pay-form/pay-form.component';
 import { InformsListComponent } from './informs-list/informs-list.component';
 import { InformsFormComponent } from './informs-form/informs-form.component';
+import { StudentWithCourseFormComponent } from './components/student-with-course-form/student-with-course-form.component';
+import { EditStudentWithCourseComponent } from './components/edit-student-with-course/edit-student-with-course.component';
 
 @NgModule({
-  declarations: [IndexComponent, StudentsListComponent, PaymentsComponent, PaymentsTableComponent, OperationsComponent, InscriptionListComponent, InscriptionFormComponent, PayFormComponent, InformsListComponent, InformsFormComponent],
+  declarations: [IndexComponent, StudentsListComponent, PaymentsComponent, PaymentsTableComponent, OperationsComponent, InscriptionListComponent, InscriptionFormComponent, PayFormComponent, InformsListComponent, InformsFormComponent, StudentWithCourseFormComponent, EditStudentWithCourseComponent],
   imports: [
     CommonModule,
     StudentsRoutingModule,
