@@ -6,6 +6,7 @@ import { UserProduction } from '../interfaces/user-production.interface';
 import { BankReport } from '../interfaces/bank-report';
 import { Voucher } from '../interfaces/voucher.interface';
 import { Report } from '../interfaces/report.interface';
+import { TransactionResponse } from '../../sales/interfaces/transaction-response.interface';
 
 const apiUrl = environment.apiUrl;
 
@@ -20,7 +21,7 @@ export class TillService {
   }
 
   pay(installmentId: number, data: any) {
-    return this.http.post<Installment>(
+    return this.http.post<TransactionResponse>(
       `${apiUrl}/till/pay-installment/${installmentId}`,
       data
     );

@@ -8,7 +8,7 @@ import {
 import { Payment } from '../../interfaces/payment.interface';
 import { StudentsService } from '../../services/students.service';
 
-type DataPaymentTable = {
+export type DataPaymentTable = {
   concept: any;
   amount: any;
   balance: any;

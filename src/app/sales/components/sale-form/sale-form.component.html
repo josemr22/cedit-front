@@ -65,6 +65,16 @@
     </div>
     <div class="col-6" formGroupName="transaction">
       <div>
+        <label class="form-label">Recibo</label>
+        <select class="form-control" formControlName="voucher_type">
+          <option value="R">Recibo</option>
+          <option value="B">Boleta</option>
+          <option disabled value="F">Factura</option>
+        </select>
+        <span *ngIf="isInvalid('transaction.voucher_type')" class="text-danger text-form">El campo es
+          requerido</span>
+      </div>
+      <div>
         <label>Banco</label>
         <select (change)="onChangeBank($event)" formControlName="bank_id" class="form-control">
           <option *ngFor="let item of banks" [value]="item.id">

@@ -86,7 +86,7 @@
                 <select class="form-control" formControlName="voucher_type">
                   <option value="R">Recibo</option>
                   <option value="B">Boleta</option>
-                  <option value="F">Factura</option>
+                  <option disabled value="F">Factura</option>
                 </select>
                 <span *ngIf="isInvalid('transaction.voucher_type')" class="text-danger text-form">El campo es
                   requerido</span>

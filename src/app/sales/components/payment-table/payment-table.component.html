@@ -1,0 +1,42 @@
+<p-table #dt [columns]="cols" [value]="data" responsiveLayout="scroll" dataKey="id"
+  [exportHeader]="'customExportHeader'">
+  <ng-template pTemplate="caption">
+    <div class="table-header mt-3 d-flex justify-content-end">
+      <input pInputText type="text" (input)="dt.filterGlobal($any($event.target!).value, 'contains')"
+        placeholder="Buscar..." />
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <!-- <th *ngFor="let col of columns">
+      {{col.header}}
+    </th> -->
+      <th *ngFor="let col of columns">
+        <div class="flex justify-content-between align-items-center">
+          {{col.header}}
+        </div>
+      </th>
+      <th>
+        <div class="flex justify-content-between align-items-center">
+          Acciones
+        </div>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowData let-columns="columns">
+    <tr [style]="rowData.type == 'd' ? '    color: #0c1c2a;
+    background-color: rgb(0 102 192 / 56%);' : 'background-color: #0c1c2a;
+    color: white;'">
+      <td *ngFor="let col of columns">
+        {{rowData[col.field]}}
+      </td>
+      <td>
+        <a *ngIf="btnPayIsVisible(rowData)" class="btn btn-danger"
+          [routerLink]="'/caja/pagar/'+rowData.installment_id">Pagar</a>
+        <a href="http://cixsolution.com" target="_blank" *ngIf="btnSeeVoucherIsVisible(rowData)"
+          class="btn btn-primary">Compr</a>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+<a [routerLink]="'/ventas/'+typeString" class="btn btn-outline-primary">Regresar</a>

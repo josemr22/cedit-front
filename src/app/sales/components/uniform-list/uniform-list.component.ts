@@ -73,14 +73,16 @@ export class UniformListComponent implements OnInit {
       });
 
     this.cols = [
-      { field: 'studentName', header: 'Estudiante' },
-      // { field: 'name', header: 'Nombre' },
-      // { field: 'course', header: 'Curso' },
-      // { field: 'turn', header: 'Turno' },
-      // { field: 'hours', header: 'Horas' },
-      // { field: 'enrolled_date', header: 'Fecha de Matrícula' },
-      // { field: 'start_date', header: 'Fecha de Inicio' },
-      // { field: 'enrolled_by', header: 'Matriculado por' },
+      { field: 'dni', header: 'DNI' },
+      { field: 'name', header: 'Nombre' },
+      { field: 'phone', header: 'Teléfono' },
+      { field: 'email', header: 'Correo' },
+      { field: 'amount', header: 'Monto' },
+      { field: 'balance', header: 'Saldo' },
+      { field: 'deuda', header: 'Estado' },
+      { field: 'state', header: 'Entrega' },
+      { field: 'created_at', header: 'Fecha de Registro' },
+      { field: 'course', header: 'Course' },
     ];
 
     this.exportColumns = this.cols.map((col) => ({
@@ -91,8 +93,17 @@ export class UniformListComponent implements OnInit {
 
   get sales() {
     return this._sales.map((s) => ({
-      id: s.id,
-      studentName: s.course_turn_student.student.name,
+      paymentId: s.id,
+      dni: s.course_turn_student.student.dni,
+      name: s.course_turn_student.student.name,
+      phone: `${s.course_turn_student.student.cellphone} ${s.course_turn_student.student.phone ? ('| ' + s.course_turn_student.student.phone) : ''}`,
+      email: s.course_turn_student.student.email,
+      amount: s.payment.amount.toFixed(2),
+      balance: s.payment.installments[0].balance.toFixed(2),
+      deuda: s.payment.installments[0].balance === 0 ? 'Cancelado' : 'Deuda',
+      state: s.state ? 'Entregado' : 'No entregado',
+      created_at: s.created_at,
+      course: s.course_turn_student.course_turn.course.name
     }));
   }
 
@@ -119,7 +130,7 @@ export class UniformListComponent implements OnInit {
     console.log('hola');
     import('xlsx').then((xlsx) => {
       const data = this.sales.map((u) => {
-        const { id, ...rest } = u;
+        const { paymentId, ...rest } = u;
         return rest;
       });
       const worksheet = xlsx.utils.json_to_sheet(data);

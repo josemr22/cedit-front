@@ -58,7 +58,7 @@ export class InscriptionFormComponent implements OnInit {
       ]),
     }),
     transaction: this.fb.group({
-      voucher_type: [null, [Validators.required]],
+      voucher_type: ['R', [Validators.required]],
       bank_id: [null, [Validators.required]],
       operation: [null, []],
       user_id: [this.authService.getUser().id, []],
@@ -133,7 +133,6 @@ export class InscriptionFormComponent implements OnInit {
           cellphone: s.cellphone,
           date_of_birth: s.date_of_birth,
           course_id: s.course_id,
-          // course_turn_id: s.course_turn_id,
           start_date: null,
           registered_by: 1,
           enrolled_by: 1,
@@ -151,7 +150,7 @@ export class InscriptionFormComponent implements OnInit {
             ],
           },
           transaction: {
-            voucher_type: null,
+            voucher_type: 'R',
             bank_id: null,
             operation: null,
             user_id: this.authService.getUser().id,
@@ -288,16 +287,26 @@ export class InscriptionFormComponent implements OnInit {
         return;
       }
     }
-    const data = this.form.value;
+    let data = this.form.value;
     if (this.student) {
-      const data = {
+      data = {
         ...this.form.value,
         student_id: this.student.id,
       };
     }
-    this.studentService.enrollStudent(data).subscribe((s) => {
-      Swal.fire('Bien hecho!', 'Estudiante inscrito correctamente', 'success');
-      this.router.navigateByUrl('/alumnos/lista');
+    this.studentService.enrollStudent(data).subscribe({
+      next: (resp) => {
+        if (!resp.sunat_response) {
+          Swal.fire('Bien Hecho!', `Pago Realizado`, 'success');
+        } else {
+          Swal.fire('Estudiante Matriculado!', `Estado del comprobante: ${resp.sunat_response.SUNAT_CODIGO_RESPUESTA}`, 'success');
+        }
+        this.router.navigateByUrl('/alumnos/lista');
+      },
+      error: (error) => {
+        console.log(error);
+        Swal.fire('Ocurrió un error, comunicarse con el administrador');
+      }
     });
   }
 

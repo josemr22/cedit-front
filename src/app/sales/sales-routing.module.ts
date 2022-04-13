@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { UniformListComponent } from './components/uniform-list/uniform-list.component';
 import { SaleFormComponent } from './components/sale-form/sale-form.component';
 import { AuthGuard } from '../auth/guards/auth.guard';
+import { PaymentTableComponent } from './components/payment-table/payment-table.component';
 
 const routes: Routes = [
   {
@@ -10,6 +11,12 @@ const routes: Routes = [
     component: UniformListComponent,
     canActivate: [AuthGuard],
     data: { menu: 'sales' },
+  },
+  {
+    path: 'pagos/:id',
+    component: PaymentTableComponent,
+    canActivate: [AuthGuard],
+    data: { menu: '' },
   },
   {
     path: 'nuevo/:type',

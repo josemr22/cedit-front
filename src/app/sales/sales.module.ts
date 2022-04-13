@@ -6,12 +6,14 @@ import { UniformListComponent } from './components/uniform-list/uniform-list.com
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { SaleFormComponent } from './components/sale-form/sale-form.component';
+import { PaymentTableComponent } from './components/payment-table/payment-table.component';
 
 
 @NgModule({
   declarations: [
     UniformListComponent,
-    SaleFormComponent
+    SaleFormComponent,
+    PaymentTableComponent
   ],
   imports: [
     CommonModule,

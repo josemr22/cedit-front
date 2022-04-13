@@ -131,11 +131,21 @@ export class PayFormComponent implements OnInit {
     }
     this.tillService
       .pay(this.installment.id, this.form.value)
-      .subscribe((_) => {
-        Swal.fire('Bien Hecho!', 'Pago realizado', 'success');
-        this.router.navigateByUrl(
-          '/alumnos/pagos/' + this.installment.payment.course_turn_student.id
-        );
+      .subscribe({
+        next: (resp) => {
+          if (!resp.sunat_response) {
+            Swal.fire('Bien Hecho!', `Pago Realizado`, 'success');
+          } else {
+            Swal.fire('Pago Registrado!', `Estado del comprobante: ${resp.sunat_response.SUNAT_CODIGO_RESPUESTA}`, 'success');
+          }
+          this.router.navigateByUrl(
+            '/alumnos/pagos/' + this.installment.payment.course_turn_student.id
+          );
+        },
+        error: error => {
+          console.log(error);
+          Swal.fire('Ocurrió un error, comunicarse con el administrador');
+        }
       });
   }
 

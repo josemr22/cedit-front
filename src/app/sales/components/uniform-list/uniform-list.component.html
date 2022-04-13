@@ -83,8 +83,7 @@
                   {{rowData[col.field]}}
                 </td>
                 <td>
-                  <button [routerLink]="['/usuarios', rowData.id]" pButton type="button" icon="pi pi-pencil"
-                    class="p-button-sm mr-1"></button>
+                  <a [routerLink]="'/ventas/pagos/'+rowData.paymentId" class="btn btn-primary mr-1">Pago</a>
                 </td>
               </tr>
             </ng-template>

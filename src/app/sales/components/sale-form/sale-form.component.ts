@@ -39,6 +39,7 @@ export class SaleFormComponent implements OnInit {
       pay_amount: [0, [Validators.required, Validators.min(0)]]
     }),
     transaction: this.fb.group({
+      voucher_type: ['R', [Validators.required]],
       bank_id: [null, [Validators.required]],
       operation: [null, []],
       user_id: [this.authService.getUser().id],
@@ -164,9 +165,12 @@ export class SaleFormComponent implements OnInit {
     }
     const data = { ...this.form.value };
     delete data.student;
-    this.saleService.storeSale(data).subscribe(transactionResponse => {
-      console.log(transactionResponse);
-      Swal.fire('Bien Hecho', 'Venta realizada', 'success');
+    this.saleService.storeSale(data).subscribe(resp => {
+      if (!resp.sunat_response) {
+        Swal.fire('Bien Hecho!', `Pago Realizado`, 'success');
+      } else {
+        Swal.fire('Venta Realizada!', `Estado del comprobante: ${resp.sunat_response.SUNAT_CODIGO_RESPUESTA}`, 'success');
+      }
       this.router.navigate(['ventas', this.saleTypeLabel]);
     });
   }

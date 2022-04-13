@@ -7,6 +7,7 @@ import { EnrollStudentDto } from '../interfaces/enroll-student-dto.interface';
 import { StudentDto } from '../interfaces/student-dto.interface';
 import { Payment } from '../interfaces/payment.interface';
 import { Operation } from '../interfaces/operation.interface';
+import { TransactionResponse } from '../../sales/interfaces/transaction-response.interface';
 
 const apiUrl = environment.apiUrl;
 
@@ -38,7 +39,7 @@ export class StudentsService {
   }
 
   enrollStudent(data: EnrollStudentDto) {
-    return this.http.post<Student>(`${apiUrl}/students-enroll`, data);
+    return this.http.post<TransactionResponse>(`${apiUrl}/students-enroll`, data);
   }
 
   updateStudentAndCourseTurn(id: number, data: StudentDto) {
