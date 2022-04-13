@@ -1,4 +1,4 @@
-<h1>{{!!spending ? 'Registrar' : 'Editar'}} Gasto</h1>
+<h1>{{!spending ? 'Registrar' : 'Editar'}} Gasto</h1>
 <form (ngSubmit)="save()" [formGroup]="form">
   <div class="mb-3">
     <label for="exampleInputText" class="form-label">Descripcion</label>
@@ -16,7 +16,7 @@
     <span *ngIf="isInvalid('date')">El campo es requerido</span>
   </div>
   <div class="d-flex justify-content-between">
-    <button type="submit" class="btn btn-primary">{{!!spending ? 'Guardar' : 'Actualizar'}}</button>
+    <button type="submit" class="btn btn-primary">{{!spending ? 'Guardar' : 'Actualizar'}}</button>
     <a routerLink="/caja/gastos" class="btn btn-outline-primary">Regresar al Listado</a>
   </div>
 </form>
