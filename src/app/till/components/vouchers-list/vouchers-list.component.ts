@@ -5,7 +5,9 @@ import { exportTable } from 'src/app/helpers/exports';
 import { Voucher } from '../../interfaces/voucher.interface';
 import { TillService } from '../../services/till.service';
 import { voucherTypes } from '../../../helpers/voucher-types';
+import { environment } from 'src/environments/environment';
 
+const voucherUrl = environment.voucherUrl;
 @Component({
   selector: 'app-vouchers-list',
   templateUrl: './vouchers-list.component.html',
@@ -51,6 +53,7 @@ export class VouchersListComponent implements OnInit {
       total: v.total.toFixed(2),
       state: v.voucher_state,
       link: v.link,
+      voucher_link: `${voucherUrl}/${v.voucher}`,
     }));
   }
 

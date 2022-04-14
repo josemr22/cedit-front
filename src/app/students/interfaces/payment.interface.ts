@@ -39,6 +39,7 @@ export interface Damping {
 export interface Transaction {
   id: number;
   name: null;
+  voucher: string;
   payment_date: null;
   bank_id: number;
   user_id: number;

@@ -3,7 +3,9 @@ import { SaleService } from '../../services/sale.service';
 import { ActivatedRoute } from '@angular/router';
 import { Installment, Payment } from 'src/app/students/interfaces/payment.interface';
 import { saleTypes } from '../../../helpers/sale-types';
+import { environment } from 'src/environments/environment';
 
+const voucherUrl = environment.voucherUrl;
 @Component({
   selector: 'app-payment-table',
   templateUrl: './payment-table.component.html',
@@ -71,6 +73,7 @@ export class PaymentTableComponent implements OnInit {
           }`,
         status: '',
         type: 'd',
+        voucher: `${voucherUrl}/${d.transaction.voucher}`,
       });
     });
   }

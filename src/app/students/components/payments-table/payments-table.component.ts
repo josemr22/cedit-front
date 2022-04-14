@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { Payment } from '../../interfaces/payment.interface';
 import { StudentsService } from '../../services/students.service';
+import { environment } from '../../../../environments/environment';
 
 export type DataPaymentTable = {
   concept: any;
@@ -17,7 +18,10 @@ export type DataPaymentTable = {
   type: string;
   status: string;
   installment_id?: number;
+  voucher?: string;
 };
+
+const voucherUrl = environment.voucherUrl;
 
 @Component({
   selector: 'app-payments-table',
@@ -69,6 +73,7 @@ export class PaymentsTableComponent implements OnInit, OnChanges {
         observation: 'Al Contado',
         status: 'Cancelado',
         type: 'h',
+        voucher: `${voucherUrl}/${this.payment.installments[0].dampings[0].transaction.voucher}`,
       });
       return;
     }
@@ -108,6 +113,7 @@ export class PaymentsTableComponent implements OnInit, OnChanges {
             }`,
           status: '',
           type: 'd',
+          voucher: `${voucherUrl}/${d.transaction.voucher}`,
         });
       });
     });
@@ -118,6 +124,6 @@ export class PaymentsTableComponent implements OnInit, OnChanges {
   }
 
   btnSeeVoucherIsVisible(rowData: any) {
-    return rowData.type == 'd';
+    return rowData.type == 'd' || rowData.type == 'h';
   }
 }
