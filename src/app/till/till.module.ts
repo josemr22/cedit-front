@@ -13,9 +13,11 @@ import { UserProductionComponent } from './components/user-production/user-produ
 import { ReportByBankComponent } from './components/report-by-bank/report-by-bank.component';
 import { CreditNotesListComponent } from './components/credit-notes-list/credit-notes-list.component';
 import { SpendingFormComponent } from './components/spending-form/spending-form.component';
+import { MoraComponent } from './components/mora/mora.component';
+import { EditTransactionComponent } from './components/edit-transaction/edit-transaction.component';
 
 @NgModule({
-  declarations: [PayFormComponent, IndexComponent, SpendingsListComponent, VouchersListComponent, ReportsComponent, UserProductionComponent, ReportByBankComponent, CreditNotesListComponent, SpendingFormComponent],
+  declarations: [PayFormComponent, IndexComponent, SpendingsListComponent, VouchersListComponent, ReportsComponent, UserProductionComponent, ReportByBankComponent, CreditNotesListComponent, SpendingFormComponent, MoraComponent, EditTransactionComponent],
   imports: [CommonModule, TillRoutingModule, SharedModule, ReactiveFormsModule],
 })
 export class TillModule {}

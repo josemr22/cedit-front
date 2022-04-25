@@ -31,6 +31,7 @@ export interface Damping {
   created_at: string;
   updated_at: string;
   installment: Installment;
+  state: boolean;
 }
 
 export interface Installment {
@@ -45,6 +46,7 @@ export interface Installment {
   created_at: string;
   updated_at: string;
   payment: Payment;
+  mora: number;
 }
 
 export interface Payment {

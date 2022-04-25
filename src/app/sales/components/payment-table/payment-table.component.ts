@@ -4,6 +4,11 @@ import { ActivatedRoute } from '@angular/router';
 import { Installment, Payment } from 'src/app/students/interfaces/payment.interface';
 import { saleTypes } from '../../../helpers/sale-types';
 import { environment } from 'src/environments/environment';
+import Swal from 'sweetalert2';
+import { from, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { TillService } from '../../../till/services/till.service';
+import { deleteTransaction } from 'src/app/helpers/transactions';
 
 const voucherUrl = environment.voucherUrl;
 @Component({
@@ -14,6 +19,7 @@ const voucherUrl = environment.voucherUrl;
 })
 export class PaymentTableComponent implements OnInit {
 
+  saleId!: number;
   payment!: Payment;
   typeString = '';
   installment!: Installment;
@@ -22,11 +28,16 @@ export class PaymentTableComponent implements OnInit {
   exportColumns!: any[];
   data: any[] = [];
 
-  constructor(private saleService: SaleService, private activatedRoute: ActivatedRoute) { }
+  constructor(
+    private saleService: SaleService,
+    private activatedRoute: ActivatedRoute,
+    private tillService: TillService,
+  ) { }
 
   ngOnInit(): void {
 
     this.activatedRoute.params.subscribe(({ id }) => {
+      this.saleId = id;
       this.saleService.getPayment(id).subscribe((p) => {
         this.payment = p;
         this.installment = this.payment.installments[0];
@@ -62,7 +73,17 @@ export class PaymentTableComponent implements OnInit {
       deuda: this.installment.balance == 0 ? 'Cancelado' : 'Deuda',
       state: this.payment.sale?.state ? 'Entregado' : 'No entregado',
       observation: '',
+      type: 'i',
+      installment_id: this.installment.id,
+      mora: this.installment.mora
     });
+    if (this.installment.mora > 0) {
+      this.data.push({
+        concept: 'Mora',
+        amount: this.installment.mora.toFixed(2),
+        type: 'mora'
+      });
+    }
     this.installment.dampings.forEach((d, idx) => {
       this.data.push({
         concept: `Pago ${idx + 1}`,
@@ -72,18 +93,78 @@ export class PaymentTableComponent implements OnInit {
         observation: `${d.transaction.bank.name} ${d.transaction.operation ? '- ' + d.transaction.operation : ''
           }`,
         status: '',
-        type: 'd',
+        type: d.state ? 'damping-active' : 'damping-inactive',
+        transaction_id: d.transaction_id,
         voucher: `${voucherUrl}/${d.transaction.voucher}`,
       });
     });
   }
 
+  auxDate: Date | null = null;
+
+  getDateSum(i: Installment, qty: number): string {
+
+    if (i.type === 'm') {
+      return '';
+    }
+
+    if (i.number == 1) {
+      this.auxDate = new Date(i.created_at);
+    } else {
+      const dateObj = this.auxDate ?? new Date(i.created_at);
+      this.auxDate = new Date(dateObj.setDate(dateObj.getDate() + qty));
+    }
+
+    return `Debe pagar el ${this.auxDate.getDate().toString().padStart(2, '0')}/${(this.auxDate.getMonth() + 1).toString().padStart(2, '0')}/${this.auxDate.getFullYear()}`;
+  }
+
   btnPayIsVisible(rowData: any) {
-    return rowData.type != 'd' && this.installment.balance != 0;
+    return rowData.installment_id && rowData.balance != 0;
   }
 
   btnSeeVoucherIsVisible(rowData: any) {
-    return rowData.type == 'd';
+    return rowData.type == 'damping-active' || rowData.type == 'damping-inactive' || rowData.type == 'h';
   }
+
+  btnTransactionIsVisible(rowData: any) {
+    return rowData.transaction_id && rowData.type == 'damping-active';
+  }
+
+  btnDeletePayIsVisible(rowData: any) {
+    return rowData.type == 'damping-active';
+  }
+
+  getRowStyle(rowData: any) {
+    let style = '';
+    switch (rowData.type) {
+      case 'damping-active':
+        style = 'color: #0c1c2a;background-color: rgb(0 102 192 / 56%);'
+        break;
+      case 'damping-inactive':
+        style = 'color: #0c1c2a;background-color: red;'
+        break;
+      case 'mora':
+        style = 'color: red;background-color: #eee;'
+        break;
+      default:
+        style = 'background-color: #0c1c2a;color: white;'
+        break;
+    }
+    return style;
+  }
+
+  deleteTransaction(transactionId: number) {
+    deleteTransaction(transactionId, this, () => {
+      this.saleService.getPayment(this.saleId).subscribe((p) => {
+        this.payment = p;
+        this.installment = this.payment.installments[0];
+        const st = saleTypes.find(s => s.code == p.sale!.type);
+        this.typeString = st!.label;
+        this.data = [];
+        this.fillTable();
+      });
+    });
+  }
+
 
 }

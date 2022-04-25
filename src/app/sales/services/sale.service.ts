@@ -30,7 +30,7 @@ export class SaleService {
     return this.http.post<TransactionResponse>(`${apiUrl}/sales`, data);
   }
 
-  getPayment(paymentId: number) {
-    return this.http.get<Payment>(`${apiUrl}/students/payment/sale/${paymentId}`);
+  getPayment(saleId: number) {
+    return this.http.get<Payment>(`${apiUrl}/students/payment/sale/${saleId}`);
   }
 }

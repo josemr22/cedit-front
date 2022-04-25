@@ -8,6 +8,7 @@ import { StudentDto } from '../interfaces/student-dto.interface';
 import { Payment } from '../interfaces/payment.interface';
 import { Operation } from '../interfaces/operation.interface';
 import { TransactionResponse } from '../../sales/interfaces/transaction-response.interface';
+import { of } from 'rxjs';
 
 const apiUrl = environment.apiUrl;
 
@@ -75,5 +76,12 @@ export class StudentsService {
 
   deleteStudents(id: number) {
     return this.http.delete<any>(`${apiUrl}/students/${id}`);
+  }
+
+  validateOperation(operation: string) {
+    return of(false);
+    return this.http.get<boolean>(
+      `${apiUrl}/students/validate-operation/${operation}`
+    );
   }
 }

@@ -16,7 +16,7 @@
           </div>
           <div class="mb-3">
             <label class="form-label">Rol</label>
-            <select formControlName="role" class="form-control">
+            <select formControlName="role_id" class="form-control">
               <option *ngFor="let item of roles" [value]="item.name">{{item.name}}</option>
             </select>
             <span *ngIf="isInvalid('role')" class="text-danger text-form">El campo es requerido</span>

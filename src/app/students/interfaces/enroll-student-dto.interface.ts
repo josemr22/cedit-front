@@ -32,6 +32,7 @@ export interface Payment {
 export interface Installment {
   amount: number;
   pay?: number;
+  mora: number;
 }
 
 export interface Transaction {

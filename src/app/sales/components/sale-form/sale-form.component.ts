@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Bank } from 'src/app/shared/interfaces/bank.interface';
 import { StudentWithCourse } from 'src/app/students/interfaces/student-with-course.interface';
@@ -10,6 +10,8 @@ import { Department } from '../../../shared/interfaces/department.interface';
 import { SaleService } from '../../services/sale.service';
 import Swal from 'sweetalert2';
 import { saleTypes } from 'src/app/helpers/sale-types';
+import { validateOperation } from 'src/app/helpers/validators';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-sale-form',
@@ -40,6 +42,7 @@ export class SaleFormComponent implements OnInit {
     }),
     transaction: this.fb.group({
       voucher_type: ['R', [Validators.required]],
+      ruc: [null],
       bank_id: [null, [Validators.required]],
       operation: [null, []],
       user_id: [this.authService.getUser().id],
@@ -75,6 +78,11 @@ export class SaleFormComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    if (this.authService.getUser().roles![0].name !== 'Administrador') {
+      this.form.get('transaction.operation')!.setAsyncValidators((control: AbstractControl) => validateOperation(control, this));
+      this.form.get('transaction.operation')?.updateValueAndValidity();
+    }
+
     this.sharedService
       .getDepartments()
       .subscribe((d) => (this.departments = d));
@@ -154,7 +162,7 @@ export class SaleFormComponent implements OnInit {
     this.form.get('transaction.payment_date')?.updateValueAndValidity();
   }
 
-  save() {
+  async save() {
     this.form.markAllAsTouched();
     if (this.form.invalid) {
       return;
@@ -163,20 +171,54 @@ export class SaleFormComponent implements OnInit {
       Swal.fire('Ups!', 'El monto a pagar no puede ser mayor al monto', 'error');
       return;
     }
+
+    if (this.form.get('transaction.voucher_type')?.value == 'F') {
+      const { value: rucInput } = await Swal.fire({
+        title: 'Ingrese RUC',
+        input: 'number',
+        inputLabel: 'Para generar una factura es necesario ingresar el RUC del cliente',
+        inputPlaceholder: 'RUC'
+      })
+
+      if (rucInput) {
+        this.form.get('transaction.ruc')!.setValue(rucInput);
+      } else {
+        return;
+      }
+    }
+
     const data = { ...this.form.value };
     delete data.student;
-    this.saleService.storeSale(data).subscribe(resp => {
-      if (!resp.sunat_response) {
-        Swal.fire('Bien Hecho!', `Pago Realizado`, 'success');
-      } else {
-        Swal.fire('Venta Realizada!', `Estado del comprobante: ${resp.sunat_response.SUNAT_CODIGO_RESPUESTA}`, 'success');
+    this.saleService.storeSale(data).subscribe({
+      next: resp => {
+        if (!resp.sunat_response) {
+          Swal.fire('Bien Hecho!', `Pago Realizado`, 'success');
+        } else {
+          Swal.fire('Venta Realizada!', `Estado del comprobante: ${resp.sunat_response.SUNAT_CODIGO_RESPUESTA}`, 'success');
+        }
+        this.router.navigate(['ventas', this.saleTypeLabel]);
+      },
+      error: (error: HttpErrorResponse) => {
+        alert(`${error.error.exception}: ${error.error.message}`);
+        this.router.navigate(['ventas', this.saleTypeLabel]);
       }
-      this.router.navigate(['ventas', this.saleTypeLabel]);
     });
   }
 
   isInvalid(field: string) {
     return this.form.get(field)?.invalid && this.form.get(field)?.touched;
+  }
+
+  getOperationError() {
+    const control = this.form.get('transaction.operation')!;
+    if (control.invalid && control.touched) {
+      if (control.errors!.required) {
+        return 'El campo es requerido';
+      }
+      return 'Ya existe el número de operación en la base de datos';
+    }
+
+    return null;
   }
 
 }

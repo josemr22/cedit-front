@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SharedService } from '../../../shared/services/shared.service';
 import { Bank } from '../../../shared/interfaces/bank.interface';
 import { Installment, Student } from '../../interfaces/installment.interface';
@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TillService } from '../../services/till.service';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../../auth/services/auth.service';
+import { validateOperation } from 'src/app/helpers/validators';
 
 @Component({
   selector: 'app-pay-form',
@@ -49,13 +50,23 @@ export class PayFormComponent implements OnInit {
       this.tillService.getInstallment(id).subscribe(
         (i) => {
           this.installment = i;
-          this.student = this.installment.payment.course_turn_student.student;
+          console.log(this.installment)
+          if (this.installment.payment.course_turn_student) {
+            this.student = this.installment.payment.course_turn_student.student;
+          } else {
+            this.student = this.installment.payment.sale!.course_turn_student.student;
+          }
           this.form.get('amount')?.setValidators(Validators.max(this.installment.balance));
           this.form.get('amount')?.updateValueAndValidity();
         },
         (_) => this.router.navigateByUrl('/alumnos/lista')
       );
     });
+
+    if (this.authService.getUser().roles![0].name !== 'Administrador') {
+      this.form.get('transaction.operation')!.setAsyncValidators((control: AbstractControl) => validateOperation(control, this));
+      this.form.get('transaction.operation')?.updateValueAndValidity();
+    }
 
     this.sharedService.getBanks().subscribe((b) => {
       this.banks = b;
@@ -138,18 +149,44 @@ export class PayFormComponent implements OnInit {
           } else {
             Swal.fire('Pago Registrado!', `Estado del comprobante: ${resp.sunat_response.SUNAT_CODIGO_RESPUESTA}`, 'success');
           }
-          this.router.navigateByUrl(
-            '/alumnos/pagos/' + this.installment.payment.course_turn_student.id
-          );
+          if (this.installment.payment.course_turn_student) {
+            this.router.navigateByUrl(
+              '/alumnos/pagos/' + this.installment.payment.course_turn_student.id
+            );
+          } else {
+            this.router.navigateByUrl(
+              '/ventas/pagos/' + this.installment.payment.sale!.id
+            );
+          }
         },
         error: error => {
-          console.log(error);
-          Swal.fire('Ocurrió un error, comunicarse con el administrador');
+          alert(`${error.error.exception}: ${error.error.message}`);
+          if (this.installment.payment.course_turn_student) {
+            this.router.navigateByUrl(
+              '/alumnos/pagos/' + this.installment.payment.course_turn_student.id
+            );
+          } else {
+            this.router.navigateByUrl(
+              '/ventas/pagos/' + this.installment.payment.sale!.id
+            );
+          }
         }
       });
   }
 
   isInvalid(field: string) {
     return this.form.get(field)?.invalid && this.form.get(field)?.touched;
+  }
+
+  getOperationError() {
+    const control = this.form.get('transaction.operation')!;
+    if (control.invalid && control.touched) {
+      if (control.errors!.required) {
+        return 'El campo es requerido';
+      }
+      return 'Ya existe el número de operación en la base de datos';
+    }
+
+    return null;
   }
 }

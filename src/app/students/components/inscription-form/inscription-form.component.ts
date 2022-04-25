@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedService } from '../../../shared/services/shared.service';
 import { Department } from '../../../shared/interfaces/department.interface';
@@ -13,6 +13,8 @@ import { Bank } from '../../../shared/interfaces/bank.interface';
 import { StudentsService } from '../../../students/services/students.service';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../../auth/services/auth.service';
+import { validateOperation } from 'src/app/helpers/validators';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-inscription-form',
@@ -169,6 +171,10 @@ export class InscriptionFormComponent implements OnInit {
       });
     });
 
+    if (this.authService.getUser().roles![0].name !== 'Administrador') {
+      this.form.get('transaction.operation')!.setAsyncValidators((control: AbstractControl) => validateOperation(control, this));
+      this.form.get('transaction.operation')?.updateValueAndValidity();
+    }
 
     this.sharedService.getDepartments().subscribe((d) => {
       this.departments = d;
@@ -312,9 +318,9 @@ export class InscriptionFormComponent implements OnInit {
         }
         this.router.navigateByUrl('/alumnos/lista');
       },
-      error: (error) => {
-        console.log(error);
-        Swal.fire('Ocurrió un error, comunicarse con el administrador');
+      error: (error: HttpErrorResponse) => {
+        alert(`${error.error.exception}: ${error.error.message}`);
+        this.router.navigateByUrl('/alumnos/lista');
       }
     });
   }
@@ -326,5 +332,17 @@ export class InscriptionFormComponent implements OnInit {
   isFormArrayInvalid(field: string, index: number) {
     const f = this.installments.controls[index].get(field)!;
     return f.invalid && f.touched;
+  }
+
+  getOperationError() {
+    const control = this.form.get('transaction.operation')!;
+    if (control.invalid && control.touched) {
+      if (control.errors!.required) {
+        return 'El campo es requerido';
+      }
+      return 'Ya existe el número de operación en la base de datos';
+    }
+
+    return null;
   }
 }

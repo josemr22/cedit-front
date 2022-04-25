@@ -1,0 +1,9 @@
+<h1>Crear Mora</h1>
+<form (ngSubmit)="save()" [formGroup]="form">
+  <div>
+    <label for="mora">Mora</label>
+    <input formControlName="mora" type="text" id="mora" class="form-control">
+    <span *ngIf="isInvalid('mora')" class="text-danger">Valor inválido</span>
+  </div>
+  <button class="btn btn-primary" type="submit">Enviar</button>
+</form>

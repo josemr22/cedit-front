@@ -24,17 +24,22 @@
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-rowData let-columns="columns">
-    <tr [style]="rowData.type == 'd' ? '    color: #0c1c2a;
-    background-color: rgb(0 102 192 / 56%);' : 'background-color: #0c1c2a;
-    color: white;'">
+    <tr [style]="getRowStyle(rowData)">
       <td *ngFor="let col of columns">
         {{rowData[col.field]}}
       </td>
       <td>
-        <a *ngIf="btnPayIsVisible(rowData)" class="btn btn-danger"
-          [routerLink]="'/caja/pagar/'+rowData.installment_id">Pagar</a>
-        <a [href]="rowData['voucher']" target="_blank" *ngIf="btnSeeVoucherIsVisible(rowData)"
-          class="btn btn-primary">Compr</a>
+        <a class="btn btn-success" *ngIf="btnPayIsVisible(rowData)"
+          [routerLink]="'/caja/pagar/'+rowData.installment_id"><i class="fa-solid fa-credit-card"></i></a>
+        <a class="btn btn-danger" *ngIf="btnPayIsVisible(rowData) && rowData.mora == 0"
+          [routerLink]="'/caja/mora/'+rowData.installment_id" title="Mora"><i class="fa-solid fa-lock"></i></a>
+        <button (click)="deleteTransaction(rowData.transaction_id)" class="btn btn-danger"
+          *ngIf="btnDeletePayIsVisible(rowData)" toottip="Eliminar Pago"><i class="fa-solid fa-trash"></i></button>
+        <a class="btn btn-secondary" *ngIf="btnTransactionIsVisible(rowData)"
+          [routerLink]="'/caja/transaccion/'+rowData.transaction_id" title="Editar Transacción"><i
+            class="fa-solid fa-pen"></i></a>
+        <a [href]="rowData['voucher']" target="_blank" *ngIf="btnSeeVoucherIsVisible(rowData)" class="btn btn-primary"
+          title="Comprobante"><i class="fa-solid fa-sheet-plastic"></i></a>
       </td>
     </tr>
   </ng-template>

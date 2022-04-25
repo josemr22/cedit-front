@@ -20,7 +20,6 @@ export class AuthGuard implements CanActivate, CanLoad {
       r = route.params.type;
       if (!options.includes(r)) return of(false);
     }
-    console.log('verificando')
     return this.authService.authenticate(r);
   }
   canLoad(

@@ -41,7 +41,7 @@
                 <select class="form-control" #vt (change)="onChangeVoucherType(vt.value)">
                   <option value="R">Recibo</option>
                   <option value="B">Boleta</option>
-                  <option disabled value="F">Factura</option>
+                  <option value="F">Factura</option>
                 </select>
                 <!-- <span *ngIf="isInvalid('voucher_type')" class="text-danger text-form">El campo es requerido</span> -->
               </td>
@@ -72,8 +72,7 @@
               *ngIf="form.get('transaction.bank_id')!.value != '1' && form.get('transaction.bank_id')!.value != '6'">
               <label class="form-label">Número de Operación</label>
               <input formControlName="operation" type="text" class="form-control">
-              <span *ngIf="isInvalid('transaction.operation')" class="text-danger text-form">El campo es
-                requerido</span>
+              <span *ngIf="getOperationError()" class="text-danger text-form">{{getOperationError()}}</span>
             </div>
             <ng-container *ngIf="form.get('transaction.bank_id')!.value == '6'">
               <div class="mb-3">

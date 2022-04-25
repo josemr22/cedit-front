@@ -12,6 +12,7 @@ export interface Installment {
   created_at: string;
   updated_at: string;
   payment: Payment;
+  mora: number;
 }
 
 export interface Payment {
@@ -22,6 +23,29 @@ export interface Payment {
   transaction_id: null;
   created_at: string;
   updated_at: string;
+  course_turn_student: CourseTurnStudent;
+  sale: Sale | null;
+}
+
+export interface Seller {
+  id: number;
+  name: string;
+  user: string;
+  email_verified_at: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Sale {
+  id: number;
+  state: number;
+  type: string;
+  payment_id: number;
+  course_turn_student_id: number;
+  user_id: number;
+  created_at: string;
+  updated_at: string;
+  seller: Seller;
   course_turn_student: CourseTurnStudent;
 }
 

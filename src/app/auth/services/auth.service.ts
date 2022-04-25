@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { switchMap, tap, catchError } from 'rxjs/operators';
-import { LoginResponse, User } from '../interfaces/LoginResponse.interface';
+import { LoginResponse } from '../interfaces/LoginResponse.interface';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { AuthenticateResponse, ItemMenu } from '../interfaces/AuthenticateResponse.interface';
+import { AuthenticateResponse, ItemMenu, User } from '../interfaces/AuthenticateResponse.interface';
 
 const apiUrl = environment.apiUrl;
 const headers = new HttpHeaders().set("X-Requested-With", "XMLHttpRequest");

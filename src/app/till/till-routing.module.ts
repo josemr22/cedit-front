@@ -9,6 +9,8 @@ import { UserProductionComponent } from './components/user-production/user-produ
 import { ReportByBankComponent } from './components/report-by-bank/report-by-bank.component';
 import { CreditNotesListComponent } from './components/credit-notes-list/credit-notes-list.component';
 import { SpendingFormComponent } from './components/spending-form/spending-form.component';
+import { MoraComponent } from './components/mora/mora.component';
+import { EditTransactionComponent } from './components/edit-transaction/edit-transaction.component';
 
 const routes: Routes = [
   {
@@ -48,6 +50,14 @@ const routes: Routes = [
   {
     path: 'pagar/:id',
     component: PayFormComponent,
+  },
+  {
+    path: 'mora/:id',
+    component: MoraComponent,
+  },
+  {
+    path: 'transaccion/:id',
+    component: EditTransactionComponent,
   },
 ];
 

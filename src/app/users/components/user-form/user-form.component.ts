@@ -14,7 +14,7 @@ export class UserFormComponent implements OnInit {
   form: FormGroup = this.fb.group({
     name: [null, [Validators.required]],
     user: [null, [Validators.required]],
-    role: [null, [Validators.required]],
+    role_id: [null, [Validators.required]],
     password: [null, [Validators.required, Validators.minLength(6)]],
   });
 
@@ -43,7 +43,7 @@ export class UserFormComponent implements OnInit {
           this.form.reset({
             name: u.name,
             user: u.user,
-            role: u.roles[0]?.name,
+            role_id: u.roles[0]?.name,
             password: '',
           });
         },
