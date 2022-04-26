@@ -61,6 +61,10 @@ export class InscriptionFormComponent implements OnInit {
     }),
     transaction: this.fb.group({
       voucher_type: ['R', [Validators.required]],
+      ruc: [null],
+      address: [null],
+      email: [null],
+      razon_social: [null],
       bank_id: [null, [Validators.required]],
       operation: [null, []],
       user_id: [this.authService.getUser().id, []],
@@ -72,41 +76,6 @@ export class InscriptionFormComponent implements OnInit {
   get installments(): FormArray {
     return this.form.get('payment.installments') as FormArray;
   }
-  // form: FormGroup = this.fb.group({
-  //   name: ['Jose', [Validators.required]],
-  //   dni: ['12121212', [Validators.required]],
-  //   email: ['josemr.22@gmail.com', [Validators.required]],
-  //   department_id: [2, [Validators.required]],
-  //   address: ['av cesar vallejo', [Validators.required]],
-  //   phone: [null],
-  //   cellphone: ['1212121212', [Validators.required]],
-  //   date_of_birth: ['1999-03-03', [Validators.required]],
-  //   course_id: [null, [Validators.required]],
-  //   course_turn_id: [null, [Validators.required]],
-  //   start_date: [null, [Validators.required]],
-  //   registered_by: [1],
-  //   enrolled_by: [1],
-  //   payment: this.fb.group({
-  //     type: ['1', [Validators.required]],
-  //     observation: [null],
-  //     amount: [0, [Validators.required, Validators.min(0)]],
-  //     enroll_amount: [0],
-  //     pay_enroll_amount: [0],
-  //     installments: this.fb.array([
-  //       this.fb.group({
-  //         amount: 0,
-  //         pay: 0,
-  //       }),
-  //     ]),
-  //   }),
-  //   transaction: this.fb.group({
-  //     bank_id: [null, [Validators.required]],
-  //     operation: [null, []],
-  //     user_id: [1, []],
-  //     name: [null, []],
-  //     payment_date: [null, []],
-  //   }),
-  // });
 
   constructor(
     private fb: FormBuilder,
@@ -153,6 +122,10 @@ export class InscriptionFormComponent implements OnInit {
           },
           transaction: {
             voucher_type: 'R',
+            ruc: [null],
+            address: [null],
+            email: [null],
+            razon_social: [null],
             bank_id: null,
             operation: null,
             user_id: this.authService.getUser().id,
@@ -287,7 +260,7 @@ export class InscriptionFormComponent implements OnInit {
     this.installments.controls[0].get('pay')?.updateValueAndValidity();
   }
 
-  save() {
+  async save() {
     this.form.markAllAsTouched();
     if (this.form.invalid) {
       return;
@@ -302,6 +275,37 @@ export class InscriptionFormComponent implements OnInit {
         return;
       }
     }
+
+    if (this.form.get('transaction.voucher_type')?.value == 'F') {
+      const { value } = await Swal.fire({
+        title: 'Ingrese RUC',
+        html:
+          '<input type="number" id="ruc" class="swal2-input" placeholder="RUC">' +
+          '<input type="text" id="address" class="swal2-input" placeholder="DIRECCIÓN">' +
+          '<input type="email" id="email" class="swal2-input" placeholder="EMAIL">' +
+          '<input type="text" id="razon_social" class="swal2-input" placeholder="RAZÓN SOCIAL">',
+        focusConfirm: false,
+        preConfirm: () => {
+          return [
+            (document.getElementById('ruc') as HTMLInputElement)!.value,
+            (document.getElementById('address') as HTMLInputElement)!.value,
+            (document.getElementById('email') as HTMLInputElement)!.value,
+            (document.getElementById('razon_social') as HTMLInputElement)!.value,
+          ]
+        }
+      })
+
+      if (value) {
+        const [ruc, address, email, razon_social] = value;
+        this.form.get('transaction.ruc')!.setValue(ruc);
+        this.form.get('transaction.address')!.setValue(address);
+        this.form.get('transaction.email')!.setValue(email);
+        this.form.get('transaction.razon_social')!.setValue(razon_social);
+      } else {
+        return;
+      }
+    }
+
     let data = this.form.value;
     if (this.student) {
       data = {

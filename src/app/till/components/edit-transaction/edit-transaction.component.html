@@ -1,10 +1,4 @@
 <h1>Editar Transacción</h1>
-<pre>
-    {{form.value | json}}
-</pre>
-<pre>
-    {{transaction | json}}
-</pre>
 <form [formGroup]="form" (ngSubmit)="save()">
   <div class="mb-3">
     <label class="form-label">Banco</label>

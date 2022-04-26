@@ -43,6 +43,9 @@ export class SaleFormComponent implements OnInit {
     transaction: this.fb.group({
       voucher_type: ['R', [Validators.required]],
       ruc: [null],
+      address: [null],
+      email: [null],
+      razon_social: [null],
       bank_id: [null, [Validators.required]],
       operation: [null, []],
       user_id: [this.authService.getUser().id],
@@ -173,15 +176,30 @@ export class SaleFormComponent implements OnInit {
     }
 
     if (this.form.get('transaction.voucher_type')?.value == 'F') {
-      const { value: rucInput } = await Swal.fire({
+      const { value } = await Swal.fire({
         title: 'Ingrese RUC',
-        input: 'number',
-        inputLabel: 'Para generar una factura es necesario ingresar el RUC del cliente',
-        inputPlaceholder: 'RUC'
+        html:
+          '<input type="number" id="ruc" class="swal2-input" placeholder="RUC">' +
+          '<input type="text" id="address" class="swal2-input" placeholder="DIRECCIÓN">' +
+          '<input type="email" id="email" class="swal2-input" placeholder="EMAIL">' +
+          '<input type="text" id="razon_social" class="swal2-input" placeholder="RAZÓN SOCIAL">',
+        focusConfirm: false,
+        preConfirm: () => {
+          return [
+            (document.getElementById('ruc') as HTMLInputElement)!.value,
+            (document.getElementById('address') as HTMLInputElement)!.value,
+            (document.getElementById('email') as HTMLInputElement)!.value,
+            (document.getElementById('razon_social') as HTMLInputElement)!.value,
+          ]
+        }
       })
 
-      if (rucInput) {
-        this.form.get('transaction.ruc')!.setValue(rucInput);
+      if (value) {
+        const [ruc, address, email, razon_social] = value;
+        this.form.get('transaction.ruc')!.setValue(ruc);
+        this.form.get('transaction.address')!.setValue(address);
+        this.form.get('transaction.email')!.setValue(email);
+        this.form.get('transaction.razon_social')!.setValue(razon_social);
       } else {
         return;
       }
