@@ -104,7 +104,13 @@ export class PaymentsTableComponent implements OnInit, OnChanges {
       status: j ? 'Deuda' : 'Cancelado',
       type: 'h',
     });
+    let aux = 0;
     this.payment.installments.forEach((i) => {
+      if (i.type == `m`) {
+        aux = this.data.length;
+      }
+
+
       this.data.push({
         concept: i.type == 'm' ? 'Matrícula' : `Mensualidad ${i.number}`,
         amount: i.amount.toFixed(2),
@@ -138,6 +144,13 @@ export class PaymentsTableComponent implements OnInit, OnChanges {
         });
       });
     });
+    if (aux != 0) {
+      const slice = this.data.slice(aux);
+      const first = this.data.slice(0, 1);
+      this.data.splice(aux);
+      this.data.splice(0, 1);
+      this.data = [...first, ...slice, ...this.data];
+    }
   }
 
   auxDate: Date | null = null;
@@ -163,7 +176,7 @@ export class PaymentsTableComponent implements OnInit, OnChanges {
   }
 
   btnSeeVoucherIsVisible(rowData: any) {
-    return rowData.type == 'damping-active' || rowData.type == 'damping-inactive' || rowData.type == 'h';
+    return rowData.type == 'damping-active' || rowData.type == 'damping-inactive' || (rowData.type == 'h' && rowData.observation == 'Al Contado');
   }
 
   btnTransactionIsVisible(rowData: any) {

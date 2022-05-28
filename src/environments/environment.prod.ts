@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://127.0.0.1:8000/api',
-  voucherUrl: 'http://127.0.0.1:8000/comprobantes',
+  apiUrl: 'http://34.70.157.41/public/index.php/api',
+  voucherUrl: 'http://34.70.157.41/public/index.php/comprobantes',
 };
