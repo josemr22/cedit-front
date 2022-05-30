@@ -145,3 +145,33 @@
     </div>
   </div>
 </form>
+
+<div id="myModal" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Ingrese Ruc</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group form-inline">
+          <input type="text" class="form-control" id="ruc" placeholder="RUC">
+          <button id="buscar_ruc" class="form-control" (click)="buscarPorRuc()">Buscar</button>
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" id="address" placeholder="Dirección" disabled>
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" id="email" placeholder="Email">
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" id="razon_social" placeholder="Razón Social" disabled>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" (click)="validateFactura()">Inscribir</button>
+      </div>
+    </div>
+  </div>
+</div>

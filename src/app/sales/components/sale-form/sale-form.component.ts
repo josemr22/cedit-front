@@ -34,7 +34,7 @@ export class SaleFormComponent implements OnInit {
   form: FormGroup = this.fb.group({
     type: [null],
     state: ['1'],
-    course_turn_student_id: [null],
+    course_turn_student_id: [null, Validators.required],
     payment: this.fb.group({
       observation: [""],
       amount: [0, [Validators.required, Validators.min(0)]],
@@ -176,35 +176,18 @@ export class SaleFormComponent implements OnInit {
     }
 
     if (this.form.get('transaction.voucher_type')?.value == 'F') {
-      const { value } = await Swal.fire({
-        title: 'Ingrese RUC',
-        html:
-          '<input type="number" id="ruc" class="swal2-input" placeholder="RUC">' +
-          '<input type="text" id="address" class="swal2-input" placeholder="DIRECCIÓN">' +
-          '<input type="email" id="email" class="swal2-input" placeholder="EMAIL">' +
-          '<input type="text" id="razon_social" class="swal2-input" placeholder="RAZÓN SOCIAL">',
-        focusConfirm: false,
-        preConfirm: () => {
-          return [
-            (document.getElementById('ruc') as HTMLInputElement)!.value,
-            (document.getElementById('address') as HTMLInputElement)!.value,
-            (document.getElementById('email') as HTMLInputElement)!.value,
-            (document.getElementById('razon_social') as HTMLInputElement)!.value,
-          ]
-        }
-      })
+      var myModal = new (window as any).bootstrap.Modal(document.getElementById('myModal'))
 
-      if (value) {
-        const [ruc, address, email, razon_social] = value;
-        this.form.get('transaction.ruc')!.setValue(ruc);
-        this.form.get('transaction.address')!.setValue(address);
-        this.form.get('transaction.email')!.setValue(email);
-        this.form.get('transaction.razon_social')!.setValue(razon_social);
-      } else {
-        return;
-      }
+      myModal.show();
+
+      return;
+    } else {
+      this.realizarVenta();
     }
 
+  }
+
+  realizarVenta() {
     const data = { ...this.form.value };
     delete data.student;
     this.saleService.storeSale(data).subscribe({
@@ -221,6 +204,34 @@ export class SaleFormComponent implements OnInit {
         this.router.navigate(['ventas', this.saleTypeLabel]);
       }
     });
+  }
+
+  validateFactura() {
+    this.form.get('transaction.email')!.setValue((document.querySelector("#email")! as HTMLInputElement).value);
+    if (!(this.form.get('transaction.email')!.value)) {
+      return;
+    }
+    if (!(this.form.get('transaction.razon_social')!.value)) {
+      return;
+    }
+    if (!(this.form.get('transaction.address')!.value)) {
+      return;
+    }
+    if (!(this.form.get('transaction.ruc')!.value)) {
+      return;
+    }
+    this.realizarVenta();
+  }
+
+  async buscarPorRuc() {
+    const ruc = (document.querySelector("#ruc")! as HTMLInputElement).value;
+    const resp = await this.studentService.getByRuc(ruc).then(r => r.json());
+
+    this.form.get('transaction.ruc')!.setValue(ruc);
+    this.form.get('transaction.address')!.setValue(resp.direccion);
+    (document.querySelector("#address")! as HTMLInputElement).value = resp.direccion;
+    this.form.get('transaction.razon_social')!.setValue(resp.nombre);
+    (document.querySelector("#razon_social")! as HTMLInputElement).value = resp.nombre;
   }
 
   isInvalid(field: string) {

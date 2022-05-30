@@ -79,9 +79,12 @@ export class StudentsService {
   }
 
   validateOperation(operation: string) {
-    return of(false);
     return this.http.get<boolean>(
       `${apiUrl}/students/validate-operation/${operation}`
     );
+  }
+
+  getByRuc(ruc: string) {
+    return fetch(`https://api.apis.net.pe/v1/ruc?numero=${ruc}`);
   }
 }
