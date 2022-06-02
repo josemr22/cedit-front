@@ -37,6 +37,8 @@ const voucherUrl = environment.voucherUrl;
   styles: [],
 })
 export class PaymentsTableComponent implements OnInit, OnChanges {
+  id: number | null = null;
+
   @Input('studentWithCourseId') studentWithCourseId: number | null = null;
   payment!: Payment;
 
@@ -50,13 +52,17 @@ export class PaymentsTableComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const id = changes.studentWithCourseId.currentValue;
-    this.studentService.getPayment(id).subscribe((p) => {
+    this.id = changes.studentWithCourseId.currentValue;
+    this.draw();
+    console.log('onchanges')
+  }
+
+  draw(){
+    this.studentService.getPayment(this.id!).subscribe((p) => {
       this.payment = p;
       this.data = [];
       this.fillTable();
     });
-    console.log('onchanges')
   }
 
   ngOnInit(): void {
@@ -187,6 +193,44 @@ export class PaymentsTableComponent implements OnInit, OnChanges {
     return rowData.type == 'damping-active';
   }
 
+  editInstallment(installmentId: number){
+
+    Swal.fire({
+      title: 'Editar Monto',
+      input: 'number',
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Actualizar',
+      cancelButtonText: 'Cancelar',
+      showLoaderOnConfirm: true,
+      preConfirm: (amount) => {
+        const data = {
+          amount
+        }
+        return new Promise((resolve, reject) => {
+          this.tillService.editInstallment(installmentId, data).subscribe(resp => {
+            if(resp){
+              this.draw();
+              resolve(true);
+            }
+          });
+        });
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: `Bien Hecho`,
+          text: 'Monto Actualizado',
+          icon:'success',
+        })
+      }
+    })
+  }
+
+  //Till
   async deleteTransaction(transactionId: number) {
 
     this.tillService.checkDeleteTransaction(transactionId)

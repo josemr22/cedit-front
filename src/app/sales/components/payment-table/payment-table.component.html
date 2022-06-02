@@ -31,6 +31,8 @@
       <td>
         <a class="btn btn-success" *ngIf="btnPayIsVisible(rowData)"
           [routerLink]="'/caja/pagar/'+rowData.installment_id"><i class="fa-solid fa-credit-card"></i></a>
+          <button class="btn btn-secondary" *ngIf="btnPayIsVisible(rowData)"
+          (click)="editInstallment(rowData.installment_id)"><i class="fa-solid fa-pencil"></i></button>
         <a class="btn btn-danger" *ngIf="btnPayIsVisible(rowData) && rowData.mora == 0"
           [routerLink]="'/caja/mora/'+rowData.installment_id" title="Mora"><i class="fa-solid fa-lock"></i></a>
         <button (click)="deleteTransaction(rowData.transaction_id)" class="btn btn-danger"

@@ -12,6 +12,9 @@ import Swal from 'sweetalert2';
 import { saleTypes } from 'src/app/helpers/sale-types';
 import { validateOperation } from 'src/app/helpers/validators';
 import { HttpErrorResponse } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+
+const voucherUrl = environment.voucherUrl;
 
 @Component({
   selector: 'app-sale-form',
@@ -166,6 +169,22 @@ export class SaleFormComponent implements OnInit {
   }
 
   async save() {
+
+    const swalDecision = await Swal.fire({
+      title: 'Atención!',
+      text: "¿Está seguro de los datos ingresados?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si',
+      cancelButtonText: 'No, cancelar'
+    });
+
+    if(!(swalDecision.isConfirmed)){
+      return;
+    }
+
     this.form.markAllAsTouched();
     if (this.form.invalid) {
       return;
@@ -193,11 +212,38 @@ export class SaleFormComponent implements OnInit {
     this.saleService.storeSale(data).subscribe({
       next: resp => {
         if (!resp.sunat_response) {
-          Swal.fire('Bien Hecho!', `Pago Realizado`, 'success');
+          Swal.fire({
+            title: 'Bien Hecho!',
+            text: "Pago Realizado",
+            icon: 'success',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Imprimir'
+          }).then(r => {
+            if(!(r.isConfirmed)){
+              window.open( `${voucherUrl}/${resp.transaction.voucher}`, '_blank');
+            }
+            this.router.navigate(['ventas', this.saleTypeLabel]);
+          });
         } else {
-          Swal.fire('Venta Realizada!', `Estado del comprobante: ${resp.sunat_response.SUNAT_CODIGO_RESPUESTA}`, 'success');
+          Swal.fire({
+            title: 'Venta Realizada!',
+            text: `Estado del comprobante: ${resp.sunat_response.SUNAT_CODIGO_RESPUESTA}`,
+            icon: 'success',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Imprimir'
+          }).then(r => {
+            if(!(r.isConfirmed)){
+              window.open( `${voucherUrl}/${resp.transaction.voucher}`, '_blank');
+            }
+            this.router.navigate(['ventas', this.saleTypeLabel]);
+          });
         }
-        this.router.navigate(['ventas', this.saleTypeLabel]);
       },
       error: (error: HttpErrorResponse) => {
         alert(`${error.error.exception}: ${error.error.message}`);
