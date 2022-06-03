@@ -14,8 +14,8 @@ export class LoginComponent implements OnInit {
   loading = false;
 
   form: FormGroup = this.fb.group({
-    user: ['Admin', [Validators.required]],
-    password: ['password', [Validators.required]],
+    user: ['', [Validators.required]],
+    password: ['', [Validators.required]],
   });
 
   constructor(

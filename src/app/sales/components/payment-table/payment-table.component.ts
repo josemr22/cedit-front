@@ -38,13 +38,7 @@ export class PaymentTableComponent implements OnInit {
 
     this.activatedRoute.params.subscribe(({ id }) => {
       this.saleId = id;
-      this.saleService.getPayment(id).subscribe((p) => {
-        this.payment = p;
-        this.installment = this.payment.installments[0];
-        const st = saleTypes.find(s => s.code == p.sale!.type);
-        this.typeString = st!.label;
-        this.fillTable();
-      });
+      this.draw();
     });
 
 
@@ -64,7 +58,55 @@ export class PaymentTableComponent implements OnInit {
     }));
   }
 
+  draw(){
+    this.saleService.getPayment(this.saleId).subscribe((p) => {
+      this.payment = p;
+      this.installment = this.payment.installments[0];
+      const st = saleTypes.find(s => s.code == p.sale!.type);
+      this.typeString = st!.label;
+      this.fillTable();
+    });
+  }
+
+  editInstallment(installmentId: number){
+
+    Swal.fire({
+      title: 'Editar Monto',
+      input: 'number',
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Actualizar',
+      cancelButtonText: 'Cancelar',
+      showLoaderOnConfirm: true,
+      preConfirm: (amount) => {
+        const data = {
+          amount
+        }
+        return new Promise((resolve, reject) => {
+          this.tillService.editInstallment(installmentId, data).subscribe(resp => {
+            if(resp){
+              this.draw();
+              resolve(true);
+            }
+          });
+        });
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: `Bien Hecho`,
+          text: 'Monto Actualizado',
+          icon:'success',
+        })
+      }
+    })
+  }
+
   fillTable() {
+    this.data=[];
     this.data.push({
       concept: 'Costo Total',
       amount: this.installment.amount.toFixed(2),

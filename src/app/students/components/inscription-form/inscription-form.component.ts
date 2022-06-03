@@ -15,6 +15,9 @@ import Swal from 'sweetalert2';
 import { AuthService } from '../../../auth/services/auth.service';
 import { validateOperation } from 'src/app/helpers/validators';
 import { HttpErrorResponse } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+
+const voucherUrl = environment.voucherUrl;
 
 @Component({
   selector: 'app-inscription-form',
@@ -316,7 +319,24 @@ export class InscriptionFormComponent implements OnInit {
     this.inscribirAlumno();
   }
 
-  inscribirAlumno() {
+  async inscribirAlumno() {
+
+    const swalDecision = await Swal.fire({
+      title: 'Atención!',
+      text: "¿Está seguro de los datos ingresados?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, proceder con la matrícula',
+      cancelButtonText: 'No, cancelar'
+    });
+
+    if(!(swalDecision.isConfirmed)){
+      return;
+    }
+
+
     let data = this.form.value;
     if (this.student) {
       data = {
@@ -327,11 +347,38 @@ export class InscriptionFormComponent implements OnInit {
     this.studentService.enrollStudent(data).subscribe({
       next: (resp) => {
         if (!resp.sunat_response) {
-          Swal.fire('Bien Hecho!', `Pago Realizado`, 'success');
+          Swal.fire({
+            title: 'Bien Hecho!',
+            text: "Pago Realizado",
+            icon: 'success',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Imprimir'
+          }).then(r => {
+            if(!(r.isConfirmed)){
+              window.open( `${voucherUrl}/${resp.transaction.voucher}`, '_blank');
+            }
+            this.router.navigateByUrl('/alumnos/lista');
+          });
         } else {
-          Swal.fire('Estudiante Matriculado!', `Estado del comprobante: ${resp.sunat_response.SUNAT_CODIGO_RESPUESTA}`, 'success');
+          Swal.fire({
+            title: 'Estudiante Matriculado!',
+            text: `Estado del comprobante: ${resp.sunat_response.SUNAT_CODIGO_RESPUESTA}`,
+            icon: 'success',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Imprimir'
+          }).then(r => {
+            if(!(r.isConfirmed)){
+              window.open( `${voucherUrl}/${resp.transaction.voucher}`, '_blank');
+            }
+            this.router.navigateByUrl('/alumnos/lista');
+          });
         }
-        this.router.navigateByUrl('/alumnos/lista');
       },
       error: (error: HttpErrorResponse) => {
         alert(`${error.error.exception}: ${error.error.message}`);

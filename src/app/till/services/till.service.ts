@@ -36,6 +36,13 @@ export class TillService {
       data
     );
   }
+ 
+  editInstallment(installmentId: number, data: any) {
+    return this.http.put<boolean>(
+      `${apiUrl}/till/installment/${installmentId}`,
+      data
+    );
+  }
 
   getUserProductionList(params: HttpParams) {
     return this.http.get<UserProduction[]>(

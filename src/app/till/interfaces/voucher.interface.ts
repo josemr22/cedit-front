@@ -7,4 +7,5 @@ export interface Voucher {
     total: number;
     responsable: string;
     link: string;
+    transaction_id?: string;
 }
