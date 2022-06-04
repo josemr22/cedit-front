@@ -85,9 +85,6 @@ export class StudentsService {
   }
 
   getByRuc(ruc: string) {
-//     const myHeader = new Headers({
-// 'Authorization': 'BEARER apis-token-2211.3iU6fw-vDlP3Ln0M9gdHrtueZgzl2yYi'
-// });
     return fetch(`https://api.apis.net.pe/v1/ruc?numero=${ruc}`);
   }
 }
