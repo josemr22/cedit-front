@@ -24,6 +24,8 @@ const voucherUrl = environment.voucherUrl;
 })
 export class SaleFormComponent implements OnInit {
 
+  loading = false;
+
   saleTypeLabel: string = '';
 
   filteredStudents: StudentWithCourse[] = [];
@@ -207,6 +209,7 @@ export class SaleFormComponent implements OnInit {
   }
 
   realizarVenta() {
+    this.loading = true;
     const data = { ...this.form.value };
     delete data.student;
     this.saleService.storeSale(data).subscribe({
@@ -244,10 +247,12 @@ export class SaleFormComponent implements OnInit {
             this.router.navigate(['ventas', this.saleTypeLabel]);
           });
         }
+        this.loading = false;
       },
       error: (error: HttpErrorResponse) => {
         alert(`${error.error.exception}: ${error.error.message}`);
         this.router.navigate(['ventas', this.saleTypeLabel]);
+        this.loading = false;
       }
     });
   }

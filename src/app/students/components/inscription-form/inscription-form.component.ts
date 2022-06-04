@@ -25,6 +25,8 @@ const voucherUrl = environment.voucherUrl;
   styles: [],
 })
 export class InscriptionFormComponent implements OnInit {
+  loading = false;
+
   student: Student | null = null;
 
   departments: Department[] = [];
@@ -336,6 +338,7 @@ export class InscriptionFormComponent implements OnInit {
       return;
     }
 
+    this.loading = true;
 
     let data = this.form.value;
     if (this.student) {
@@ -379,10 +382,12 @@ export class InscriptionFormComponent implements OnInit {
             this.router.navigateByUrl('/alumnos/lista');
           });
         }
+        this.loading = true;
       },
       error: (error: HttpErrorResponse) => {
         alert(`${error.error.exception}: ${error.error.message}`);
         this.router.navigateByUrl('/alumnos/lista');
+        this.loading = true;
       }
     });
   }

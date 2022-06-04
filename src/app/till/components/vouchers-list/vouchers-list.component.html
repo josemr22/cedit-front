@@ -93,6 +93,7 @@
                   <a [href]="rowData.voucher_link" target="_blank" type="button" class="btn btn-primary">Ver
                     Comprobante</a>
                     <button (click)="deleteTransaction(rowData.transaction_id)" class="btn btn-danger" toottip="Eliminar Pago"><i class="fa-solid fa-trash"></i></button>
+                    <!-- <button (click)="resendToSunat(rowData.voucher)" *ngIf="resendIsVisible(rowData)" class="btn btn-success" toottip="Reenviar a Sunat"><i class="fa-solid fa-arrow"></i></button> -->
                 </td>
               </tr>
             </ng-template>

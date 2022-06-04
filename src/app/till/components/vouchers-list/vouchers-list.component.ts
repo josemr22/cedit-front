@@ -124,4 +124,20 @@ export class VouchersListComponent implements OnInit {
       });
   }
 
+  resendIsVisible(v: any){
+    if(v.voucher_type === 'R'){
+      return false;
+    }
+    if(v.voucher_state === 'Emitido'){
+      return false;
+    }
+    if(v.voucher_state === 'Anulado'){
+      return false;
+    }
+    if(v.state === 0){
+      return false;
+    }
+    return true;
+  }
+
 }

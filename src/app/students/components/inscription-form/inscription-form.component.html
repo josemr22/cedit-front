@@ -20,7 +20,7 @@
                 <div class="col-6">
                   <div class="mb-3">
                     <label class="form-label">DNI</label>
-                    <input formControlName="dni" type="number" class="form-control">
+                    <input formControlName="dni" type="text" class="form-control">
                     <span *ngIf="isInvalid('dni')" class="text-danger text-form">El campo es requerido</span>
                   </div>
                 </div>
@@ -263,7 +263,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-primary" (click)="validateFactura()">Inscribir</button>
+          <button type="button" class="btn btn-primary" [disabled]="loading" (click)="validateFactura()">Inscribir</button>
         </div>
       </div>
     </div>

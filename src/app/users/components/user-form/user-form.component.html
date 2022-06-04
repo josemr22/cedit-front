@@ -31,7 +31,7 @@
             <span *ngIf="isInvalid('password')" class="text-danger text-form">Ingrese al menos 6 caracteres</span>
           </div>
           <div class="mb-3 d-flex gap-2">
-            <button type="submit" class="btn btn-primary">{{!userId ? 'Guardar' : 'Actualizar'}}</button>
+            <button type="submit" [disabled]="loading" class="btn btn-primary">{{!userId ? 'Guardar' : 'Actualizar'}}</button>
             <a routerLink="/usuarios" class="btn btn-primary">Volver</a>
           </div>
         </form>

@@ -15,6 +15,7 @@ import { validateOperation } from 'src/app/helpers/validators';
   styles: [],
 })
 export class PayFormComponent implements OnInit {
+  loading = false;
   banks: Bank[] = [];
   installment!: Installment;
   student!: Student;
@@ -175,6 +176,8 @@ export class PayFormComponent implements OnInit {
       }
     }
 
+    this.loading = true;
+
     this.tillService
       .pay(this.installment.id, this.form.value)
       .subscribe({
@@ -193,6 +196,7 @@ export class PayFormComponent implements OnInit {
               '/ventas/pagos/' + this.installment.payment.sale!.id
             );
           }
+          this.loading = false;
         },
         error: error => {
           alert(`${error.error.exception}: ${error.error.message}`);
@@ -205,6 +209,7 @@ export class PayFormComponent implements OnInit {
               '/ventas/pagos/' + this.installment.payment.sale!.id
             );
           }
+          this.loading = false;
         }
       });
   }

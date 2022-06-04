@@ -11,6 +11,8 @@ import { ActivatedRoute, Router } from '@angular/router';
   styles: [],
 })
 export class UserFormComponent implements OnInit {
+  loading = false;
+
   form: FormGroup = this.fb.group({
     name: [null, [Validators.required]],
     user: [null, [Validators.required]],
@@ -57,10 +59,12 @@ export class UserFormComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
+    this.loading=true;
     if (!this.userId) {
       this.userService.storeUser(this.form.value).subscribe((user) => {
         Swal.fire('Bien Hecho', 'Usuario Creado Correctamente', 'success');
         this.router.navigateByUrl('/usuarios');
+      this.loading=false;
       });
     } else {
       this.userService
@@ -72,6 +76,7 @@ export class UserFormComponent implements OnInit {
             'success'
           );
           this.router.navigateByUrl('/usuarios');
+        this.loading=false;
         });
     }
   }
