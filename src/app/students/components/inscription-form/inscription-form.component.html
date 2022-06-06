@@ -252,22 +252,23 @@
         </div>
         <div class="modal-body">
           <div class="form-group form-inline">
-            <input type="text" class="form-control" id="ruc" placeholder="RUC">
+            <input type="text" class="form-control" id="ruc" placeholder="RUC" autocomplete="off">
             <button id="buscar_ruc" class="form-control" (click)="buscarPorRuc()">Buscar</button>
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" id="address" placeholder="Dirección">
+            <input type="text" class="form-control" id="address" placeholder="Dirección" autocomplete="off">
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" id="email" placeholder="Email">
+            <input type="text" class="form-control" id="email" placeholder="Email" autocomplete="off">
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" id="razon_social" placeholder="Razón Social">
+            <input type="text" class="form-control" id="razon_social" placeholder="Razón Social" autocomplete="off">
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-primary" [disabled]="loading" (click)="validateFactura()">Inscribir</button>
+          <button type="button" class="btn btn-primary" [disabled]="loading"
+            (click)="validateFactura()">Inscribir</button>
         </div>
       </div>
     </div>
