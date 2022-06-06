@@ -78,9 +78,9 @@ export class StudentsService {
     return this.http.delete<any>(`${apiUrl}/students/${id}`);
   }
 
-  validateOperation(operation: string) {
+  getOperationIsTaken(operation: string) {
     return this.http.get<boolean>(
-      `${apiUrl}/students/validate-operation/${operation}`
+      `${apiUrl}/transactions/operation-is-taken/${operation}`
     );
   }
 

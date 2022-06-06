@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl, AsyncValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Bank } from 'src/app/shared/interfaces/bank.interface';
 import { StudentWithCourse } from 'src/app/students/interfaces/student-with-course.interface';
@@ -10,7 +10,7 @@ import { Department } from '../../../shared/interfaces/department.interface';
 import { SaleService } from '../../services/sale.service';
 import Swal from 'sweetalert2';
 import { saleTypes } from 'src/app/helpers/sale-types';
-import { validateOperation } from 'src/app/helpers/validators';
+import { btnToggleControlTransactionIsVisible, controlTransactionIsActive, getOperationError, toggleControlTransaction, validateOperation } from 'src/app/helpers/validators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
@@ -23,6 +23,8 @@ const voucherUrl = environment.voucherUrl;
   ]
 })
 export class SaleFormComponent implements OnInit {
+
+  validateOperationFunction: AsyncValidatorFn = (control: AbstractControl) => validateOperation(control, this);
 
   loading = false;
 
@@ -52,7 +54,7 @@ export class SaleFormComponent implements OnInit {
       email: [null],
       razon_social: [null],
       bank_id: [null, [Validators.required]],
-      operation: [null, []],
+      operation: [null, [], [this.validateOperationFunction]],
       user_id: [this.authService.getUser().id],
       name: [null, []],
       payment_date: [null, []],
@@ -86,11 +88,6 @@ export class SaleFormComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if (this.authService.getUser().roles![0].name !== 'Administrador') {
-      this.form.get('transaction.operation')!.setAsyncValidators((control: AbstractControl) => validateOperation(control, this));
-      this.form.get('transaction.operation')?.updateValueAndValidity();
-    }
-
     this.sharedService
       .getDepartments()
       .subscribe((d) => (this.departments = d));
@@ -290,15 +287,19 @@ export class SaleFormComponent implements OnInit {
   }
 
   getOperationError() {
-    const control = this.form.get('transaction.operation')!;
-    if (control.invalid && control.touched) {
-      if (control.errors!.required) {
-        return 'El campo es requerido';
-      }
-      return 'Ya existe el número de operación en la base de datos';
-    }
+    return getOperationError(this);
+  }
 
-    return null;
+  btnToggleControlTransactionIsVisible(){
+    return btnToggleControlTransactionIsVisible(this);
+  }
+
+  toggleControlTransaction(){
+    toggleControlTransaction(this);
+  }
+
+  get controlTransactionIsActive(): boolean{
+    return controlTransactionIsActive(this);
   }
 
 }

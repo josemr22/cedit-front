@@ -5,7 +5,7 @@
       <div>
         <label>Nombre</label>
         <input formControlName="name" type="text" class="form-control">
-        <span *ngIf="isInvalid('name')" class="text-danger text-form">El campo es requerido</span>
+        <span *ngIf="isInvalid('name')" class="text-danger text-form" (keyup)="capitalizeName('name')">El campo es requerido</span>
       </div>
       <div>
         <label>DNI</label>

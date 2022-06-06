@@ -1,7 +1,7 @@
 <form>
   <div class="mb-3">
     <label for="exampleInputText" class="form-label">Descripcion</label>
-    <input #name type="text" class="form-control">
+    <input #name type="text" class="form-control" (keyup)="capitalizeName($event)">
   </div>
   <div class="mb-3">
     <label for="exampleInputText" class="form-label">Número de días para

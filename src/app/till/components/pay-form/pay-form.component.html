@@ -74,6 +74,10 @@
               <input formControlName="operation" type="text" class="form-control">
               <span *ngIf="getOperationError()" class="text-danger text-form">{{getOperationError()}}</span>
             </div>
+            <div class="my-2 d-flex justify-content-center"
+            *ngIf="btnToggleControlTransactionIsVisible()">
+            <button class="btn btn-primary" type="button" (click)="toggleControlTransaction()">{{controlTransactionIsActive ? 'Desactivar' : 'Activar'}} Control de Transacción</button>
+          </div>
             <ng-container *ngIf="form.get('transaction.bank_id')!.value == '6'">
               <div class="mb-3">
                 <label class="form-label">Nombre</label>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SharedService } from '../../../shared/services/shared.service';
 import { Bank } from '../../../shared/interfaces/bank.interface';
 import { Installment, Student } from '../../interfaces/installment.interface';
@@ -7,7 +7,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TillService } from '../../services/till.service';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../../auth/services/auth.service';
-import { validateOperation } from 'src/app/helpers/validators';
+import { btnToggleControlTransactionIsVisible, controlTransactionIsActive, getOperationError, toggleControlTransaction, validateOperation } from 'src/app/helpers/validators';
+import { StudentsService } from '../../../students/services/students.service';
 
 @Component({
   selector: 'app-pay-form',
@@ -15,6 +16,8 @@ import { validateOperation } from 'src/app/helpers/validators';
   styles: [],
 })
 export class PayFormComponent implements OnInit {
+  validateOperationFunction: AsyncValidatorFn = (control: AbstractControl) => validateOperation(control, this);
+  
   loading = false;
   banks: Bank[] = [];
   installment!: Installment;
@@ -30,7 +33,7 @@ export class PayFormComponent implements OnInit {
       email: [null],
       razon_social: [null],
       bank_id: [null, [Validators.required]],
-      operation: [null, []],
+      operation: [null, [], [this.validateOperationFunction]],
       user_id: [this.authService.getUser().id, []],
       name: [null, []],
       payment_date: [null, []],
@@ -48,6 +51,7 @@ export class PayFormComponent implements OnInit {
     private tillService: TillService,
     private router: Router,
     private authService: AuthService,
+    private studentService: StudentsService
   ) { }
 
   ngOnInit(): void {
@@ -67,11 +71,6 @@ export class PayFormComponent implements OnInit {
         (_) => this.router.navigateByUrl('/alumnos/lista')
       );
     });
-
-    if (this.authService.getUser().roles![0].name !== 'Administrador') {
-      this.form.get('transaction.operation')!.setAsyncValidators((control: AbstractControl) => validateOperation(control, this));
-      this.form.get('transaction.operation')?.updateValueAndValidity();
-    }
 
     this.sharedService.getBanks().subscribe((b) => {
       this.banks = b;
@@ -219,14 +218,18 @@ export class PayFormComponent implements OnInit {
   }
 
   getOperationError() {
-    const control = this.form.get('transaction.operation')!;
-    if (control.invalid && control.touched) {
-      if (control.errors!.required) {
-        return 'El campo es requerido';
-      }
-      return 'Ya existe el número de operación en la base de datos';
-    }
+    return getOperationError(this);
+  }
 
-    return null;
+  btnToggleControlTransactionIsVisible(){
+    return btnToggleControlTransactionIsVisible(this);
+  }
+
+  toggleControlTransaction(){
+    toggleControlTransaction(this);
+  }
+
+  get controlTransactionIsActive(): boolean{
+    return controlTransactionIsActive(this);
   }
 }

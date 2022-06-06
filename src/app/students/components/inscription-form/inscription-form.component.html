@@ -8,7 +8,7 @@
             <div class="col-6">
               <div class="mb-3">
                 <label class="form-label">Nombre</label>
-                <input formControlName="name" type="text" class="form-control">
+                <input formControlName="name" type="text" class="form-control" (keyup)="capitalizeName('name')">
                 <span *ngIf="isInvalid('name')" class="text-danger text-form">El campo es requerido</span>
               </div>
               <div class="mb-3">
@@ -105,6 +105,10 @@
                 <label class="form-label">Número de Operación</label>
                 <input formControlName="operation" type="text" class="form-control">
                 <span *ngIf="getOperationError()" class="text-danger text-form">{{getOperationError()}}</span>
+              </div>
+              <div class="my-2 d-flex justify-content-center"
+                *ngIf="btnToggleControlTransactionIsVisible()">
+                <button class="btn btn-primary" type="button" (click)="toggleControlTransaction()">{{controlTransactionIsActive ? 'Desactivar' : 'Activar'}} Control de Transacción</button>
               </div>
 
               <ng-container *ngIf="form.get('transaction.bank_id')!.value == '6'">
@@ -238,7 +242,7 @@
       </div>
     </div>
   </div>
-
+  
   <div id="myModal" class="modal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">

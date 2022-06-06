@@ -45,6 +45,10 @@ export class InformsFormComponent implements OnInit {
     private sharedService: SharedService,
   ) { }
 
+  capitalizeName(field: string){
+    this.form.get(field)?.setValue(this.form.get(field)?.value.toUpperCase());
+  }
+
   ngOnInit(): void {
     this.sharedService.getDepartments().subscribe((d) => {
       this.departments = d;

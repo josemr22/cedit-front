@@ -36,7 +36,12 @@ export class FormCourseComponent implements OnInit {
     }, 400);
   }
 
+  capitalizeName(event: KeyboardEvent){
+    this.nameInput.nativeElement.value = (event.target as HTMLInputElement).value.toUpperCase();
+  }
+
   ngOnChanges(changes: SimpleChanges) {
+    console.log('1234')
     if (!(this.nameInput && this.daysInput)) {
       return;
     }
@@ -50,7 +55,8 @@ export class FormCourseComponent implements OnInit {
       return;
     }
 
-    this.nameInput.nativeElement.value = course.name;
+    console.log(course.name.toUpperCase())
+    this.nameInput.nativeElement.value = course.name.toUpperCase();
     this.daysInput.nativeElement.value = course.days;
   }
 

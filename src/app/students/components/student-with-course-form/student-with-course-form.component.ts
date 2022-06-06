@@ -35,6 +35,10 @@ export class StudentWithCourseFormComponent implements OnInit, OnChanges {
     private sharedService: SharedService,
   ) { }
 
+  capitalizeName(field: string){
+    this.form.get(field)?.setValue(this.form.get(field)?.value.toUpperCase());
+  }
+
   ngOnInit(): void {
     this.sharedService
       .getDepartments()
