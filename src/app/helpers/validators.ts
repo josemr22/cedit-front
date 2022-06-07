@@ -31,9 +31,20 @@ export function desactivateControlTransaction(context: any){
 }
 
 export async function toggleControlTransaction(context: any){
+    const controlIsActive = controlTransactionIsActive(context);
+    let msg = '';
+    if(controlIsActive){
+        msg = 'ALERTA. ESTE BOTON PERMITIRÁ QUE EL ALUMNO SE INSCRIBA CON UNA TRANSACCION EXISTENTE';
+    }else{
+        msg = 'ALERTA. ESTE BOTON ACTIVARÁ EL CONTROL DE NO DUPLICIDAD';
+    }
     const decision = await Swal.fire({
-        title: 'Ingrese código',
+        title: 'Ingrese contraseña',
         input: 'text',
+        html:
+        `<p>
+        ${msg}
+        </p>`,
         inputAttributes: {
           autocapitalize: 'off',
           autocomplete: 'off'

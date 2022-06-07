@@ -6,6 +6,7 @@ import { CourseTurn } from 'src/app/courses/interfaces/course-turn.interface';
 import { Department } from 'src/app/shared/interfaces/department.interface';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { Course } from 'src/app/courses/interfaces/course.interface';
+import { map, switchMap } from 'rxjs/operators';
 
 
 @Component({
@@ -44,6 +45,20 @@ export class StudentWithCourseFormComponent implements OnInit, OnChanges {
       .getDepartments()
       .subscribe((d) => (this.departments = d));
     this.courseService.getCourses().subscribe((c) => (this.courses = c));
+
+    this.form.get('course_id')?.valueChanges
+    .pipe(
+      switchMap(courseId => {
+        return this.courseService.getTurns(courseId);
+      }
+      )
+    )
+    .subscribe((ct) => {
+      this.courseTurns = ct;
+      // if(this.courseTurns.length>0){
+        this.form.get('course_turn_id')?.setValue(this.courseTurns[0]?.id);
+      // }
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
