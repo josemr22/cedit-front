@@ -20,6 +20,11 @@ const voucherUrl = environment.voucherUrl;
   selector: 'app-sale-form',
   templateUrl: './sale-form.component.html',
   styles: [
+    `
+      .hide{
+        display: none;
+      }
+    `
   ]
 })
 export class SaleFormComponent implements OnInit {
@@ -42,6 +47,7 @@ export class SaleFormComponent implements OnInit {
     type: [null],
     state: ['1'],
     course_turn_student_id: [null, Validators.required],
+    extra: [null],
     payment: this.fb.group({
       observation: [""],
       amount: [0, [Validators.required, Validators.min(0)]],
@@ -94,6 +100,7 @@ export class SaleFormComponent implements OnInit {
 
     this.activatedRoute.params.subscribe(({ type }) => {
       const saleTypeObj = saleTypes.find(st => st.label == type);
+      this.saleType = saleTypeObj!.code;
       if (!saleTypeObj) {
         this.router.navigateByUrl('/ventas/uniformes');
         return;

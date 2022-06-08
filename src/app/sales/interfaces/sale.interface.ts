@@ -10,6 +10,7 @@ export interface Sale {
     updated_at: string;
     seller: Seller;
     course_turn_student: CourseTurnStudent;
+    extra: string | null;
     payment: Payment;
 }
 

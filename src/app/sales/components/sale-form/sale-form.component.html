@@ -57,10 +57,18 @@
             {{item.days + ', '+item.turn.name + ' de '+item.start_hour+ ' a ' + item.end_hour}}</option>
         </select>
       </div> -->
-        <div>
+        <div *ngIf="false">
           <label>Fecha de Inicio</label>
           <input formControlName="start_date" type="date" class="form-control">
         </div>
+      </div>
+      <div *ngIf="saleType==='c'">
+        <label>Fecha de Culminación</label>
+        <input formControlName="extra" type="date" class="form-control">
+      </div>
+      <div *ngIf="saleType==='s'">
+        <label>Servicio</label>
+        <input formControlName="extra" type="text" class="form-control">
       </div>
     </div>
     <div class="col-6" formGroupName="transaction">
@@ -109,7 +117,7 @@
   <div>
     <h5>Datos de Pago</h5>
     <div class="d-flex" style="gap: 15px">
-      <div>
+      <div [class]="saleType == 's' ? 'hide' : ''">
         <label>Tipo de Pago</label>
         <div class="form-check">
           <input value="1" formControlName="state" class="form-check-input" type="radio" id="entregado">

@@ -25,7 +25,6 @@ export class UniformListComponent implements OnInit {
 
   saleType: string = '';
 
-  cols!: any[];
   exportColumns!: any[];
 
   filters: FormGroup = this.fb.group({
@@ -72,7 +71,14 @@ export class UniformListComponent implements OnInit {
         this.filters.get('saleYear')?.setValue(this.saleYears[0]);
       });
 
-    this.cols = [
+    this.exportColumns = this.cols.map((col) => ({
+      title: col.header,
+      dataKey: col.field,
+    }));
+  }
+
+  get cols(){
+    const c = [
       { field: 'dni', header: 'DNI' },
       { field: 'name', header: 'Nombre' },
       { field: 'phone', header: 'Teléfono' },
@@ -82,13 +88,22 @@ export class UniformListComponent implements OnInit {
       { field: 'deuda', header: 'Estado' },
       { field: 'state', header: 'Entrega' },
       { field: 'created_at', header: 'Fecha de Registro' },
+      { field: 'extra', header: `${this.saleType == 'servicios' ? 'Descripción' : 'Fecha de culminación'}` },
       { field: 'course', header: 'Course' },
     ];
 
-    this.exportColumns = this.cols.map((col) => ({
-      title: col.header,
-      dataKey: col.field,
-    }));
+    if(this.saleType == 'uniformes'){
+      const idx = c.findIndex(e => e.field == 'extra');
+      c.splice(idx,1);
+    }
+    if(this.saleType == 'servicios'){
+      const idx = c.findIndex(e => e.field == 'course');
+      c.splice(idx,1);
+      const idx2 = c.findIndex(e => e.field == 'state');
+      c.splice(idx2,1);
+    }
+
+    return c;
   }
 
   get sales() {
@@ -103,6 +118,7 @@ export class UniformListComponent implements OnInit {
       deuda: s.payment.installments[0].balance === 0 ? 'Cancelado' : 'Deuda',
       state: s.state ? 'Entregado' : 'No entregado',
       created_at: s.created_at,
+      extra: s.extra,
       course: s.course_turn_student.course_turn.course.name
     }));
   }
