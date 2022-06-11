@@ -5,11 +5,12 @@ import { SharedService } from 'src/app/shared/services/shared.service';
 import { AuthService } from '../../../auth/services/auth.service';
 import { Bank } from '../../../shared/interfaces/bank.interface';
 import { ActivatedRoute, Router } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { TillService } from '../../services/till.service';
 import { Transaction } from '../../../students/interfaces/payment.interface';
 import Swal from 'sweetalert2';
 import { StudentsService } from 'src/app/students/services/students.service';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-edit-transaction',
@@ -37,7 +38,7 @@ export class EditTransactionComponent implements OnInit {
   form: FormGroup = this.fb.group({
     transaction: this.fb.group({
       bank_id: null,
-      operation: [null, [], [this.validateOperationFunction]],
+      operation: [null, []],
       user_id: this.authService.getUser().id,
       name: null,
       payment_date: null,
@@ -124,16 +125,38 @@ export class EditTransactionComponent implements OnInit {
   }
 
   save() {
-    this.tillService.editTransaction(this.transaction.id, this.form.get('transaction')!.value).subscribe({
-      next: r => {
-        Swal.fire('Bien Hecho!', 'Transacción editada', 'success');
-        if (this.transaction.dampings![0].installment.payment.course_turn_student) {
-          this.router.navigateByUrl(`/alumnos/pagos/${this.transaction.dampings![0].installment.payment.course_turn_student.id}`);
-        } else {
-          this.router.navigateByUrl(`/ventas/pagos/${this.transaction.dampings![0].installment.payment.sale!.id}`);
+
+    this.sharedService.getControlStatus().pipe(
+      switchMap(status => {
+        if(status){
+          return this.studentService.getOperationIsTaken(this.form.get('transaction.operation')!.value).pipe(
+              catchError(_ => {
+                  return of(true);
+              })
+          );
+        }else{
+          return of(false);
         }
+      }),
+    ).subscribe(isTaken => {
+      if(isTaken){
+        Swal.fire('El número de operación ya existe. No puede continuar con la operación');
+      }else{
+        
+        this.tillService.editTransaction(this.transaction.id, this.form.get('transaction')!.value).subscribe({
+          next: r => {
+            Swal.fire('Bien Hecho!', 'Transacción editada', 'success');
+            if (this.transaction.dampings![0].installment.payment.course_turn_student) {
+              this.router.navigateByUrl(`/alumnos/pagos/${this.transaction.dampings![0].installment.payment.course_turn_student.id}`);
+            } else {
+              this.router.navigateByUrl(`/ventas/pagos/${this.transaction.dampings![0].installment.payment.sale!.id}`);
+            }
+          }
+        });
+    
       }
     });
+
   }
 
 }

@@ -17,6 +17,8 @@ import { btnToggleControlTransactionIsVisible, controlTransactionIsActive, getOp
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { toggleControlTransaction } from '../../../helpers/validators';
+import { catchError, switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 const voucherUrl = environment.voucherUrl;
 
@@ -74,7 +76,7 @@ export class InscriptionFormComponent implements OnInit {
       email: [null],
       razon_social: [null],
       bank_id: [null, [Validators.required]],
-      operation: [null, [], [this.validateOperationFunction]],
+      operation: [null, []],
       user_id: [this.authService.getUser().id, []],
       name: [null, []],
       payment_date: [null, []],
@@ -269,31 +271,53 @@ export class InscriptionFormComponent implements OnInit {
   }
 
   async save() {
-    this.form.markAllAsTouched();
-    if (this.form.invalid) {
-      return;
-    }
-    if (this.form.get('payment.type')!.value == '0') {
-      if (this.form.get('payment.pay_enroll_amount')!.value > this.form.get('payment.enroll_amount')!.value) {
-        Swal.fire('Ups!', 'El monto a pagar de matrícula no puede ser mayor al monto de matrícula', 'error');
-        return;
+
+    this.sharedService.getControlStatus().pipe(
+      switchMap(status => {
+        if(status){
+          return this.studentService.getOperationIsTaken(this.form.get('transaction.operation')!.value).pipe(
+              catchError(_ => {
+                  return of(true);
+              })
+          );
+        }else{
+          return of(false);
+        }
+      }),
+    ).subscribe(isTaken => {
+      if(isTaken){
+        Swal.fire('El número de operación ya existe. No puede continuar con la operación');
+      }else{
+
+        this.form.markAllAsTouched();
+        if (this.form.invalid) {
+          return;
+        }
+        if (this.form.get('payment.type')!.value == '0') {
+          if (this.form.get('payment.pay_enroll_amount')!.value > this.form.get('payment.enroll_amount')!.value) {
+            Swal.fire('Ups!', 'El monto a pagar de matrícula no puede ser mayor al monto de matrícula', 'error');
+            return;
+          }
+          if ((this.form.get('payment.installments') as FormArray).value[0].amount < (this.form.get('payment.installments') as FormArray).value[0].pay) {
+            Swal.fire('Ups!', 'El monto a pagar de la mensualidad 1 no puede ser mayor al monto de la mensualidad 1', 'error');
+            return;
+          }
+        }
+    
+        if (this.form.get('transaction.voucher_type')?.value == 'F') {
+    
+          var myModal = new (window as any).bootstrap.Modal(document.getElementById('myModal'))
+    
+          myModal.show();
+    
+          return;
+        } else {
+          this.inscribirAlumno();
+        } 
+        
       }
-      if ((this.form.get('payment.installments') as FormArray).value[0].amount < (this.form.get('payment.installments') as FormArray).value[0].pay) {
-        Swal.fire('Ups!', 'El monto a pagar de la mensualidad 1 no puede ser mayor al monto de la mensualidad 1', 'error');
-        return;
-      }
-    }
-
-    if (this.form.get('transaction.voucher_type')?.value == 'F') {
-
-      var myModal = new (window as any).bootstrap.Modal(document.getElementById('myModal'))
-
-      myModal.show();
-
-      return;
-    } else {
-      this.inscribirAlumno();
-    }
+    });
+    
   }
 
   async buscarPorRuc() {

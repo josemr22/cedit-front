@@ -33,4 +33,13 @@ export class SharedService {
   getDashboardData() {
     return this.http.get<DashboardDataResponse>(`${apiUrl}/get-dashboard-data`);
   }
+
+  getControlStatus() {
+    return this.http.get<boolean>(`${apiUrl}/get-control-status`);
+  }
+
+  toggleControl() {
+    return this.http.post<boolean>(`${apiUrl}/toggle-control`, {});
+  }
+
 }

@@ -11,6 +11,7 @@ import { CreditNotesListComponent } from './components/credit-notes-list/credit-
 import { SpendingFormComponent } from './components/spending-form/spending-form.component';
 import { MoraComponent } from './components/mora/mora.component';
 import { EditTransactionComponent } from './components/edit-transaction/edit-transaction.component';
+import { OperationControlComponent } from './components/operation-control/operation-control.component';
 
 const routes: Routes = [
   {
@@ -46,6 +47,10 @@ const routes: Routes = [
   {
     path: 'gastos/:id',
     component: SpendingFormComponent,
+  },
+  {
+    path: 'control-operacion',
+    component: OperationControlComponent,
   },
   {
     path: 'pagar/:id',

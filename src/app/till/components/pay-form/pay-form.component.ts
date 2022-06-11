@@ -9,6 +9,8 @@ import Swal from 'sweetalert2';
 import { AuthService } from '../../../auth/services/auth.service';
 import { btnToggleControlTransactionIsVisible, controlTransactionIsActive, getOperationError, toggleControlTransaction, validateOperation } from 'src/app/helpers/validators';
 import { StudentsService } from '../../../students/services/students.service';
+import { catchError, switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-pay-form',
@@ -140,6 +142,7 @@ export class PayFormComponent implements OnInit {
   }
 
   async save() {
+
     this.form.markAllAsTouched();
     if (this.form.invalid) {
       return;
@@ -177,40 +180,63 @@ export class PayFormComponent implements OnInit {
 
     this.loading = true;
 
-    this.tillService
-      .pay(this.installment.id, this.form.value)
-      .subscribe({
-        next: (resp) => {
-          if (!resp.sunat_response) {
-            Swal.fire('Bien Hecho!', `Pago Realizado`, 'success');
-          } else {
-            Swal.fire('Pago Registrado!', `Estado del comprobante: ${resp.sunat_response.SUNAT_CODIGO_RESPUESTA}`, 'success');
-          }
-          if (this.installment.payment.course_turn_student) {
-            this.router.navigateByUrl(
-              '/alumnos/pagos/' + this.installment.payment.course_turn_student.id
-            );
-          } else {
-            this.router.navigateByUrl(
-              '/ventas/pagos/' + this.installment.payment.sale!.id
-            );
-          }
-          this.loading = false;
-        },
-        error: error => {
-          alert(`${error.error.exception}: ${error.error.message}`);
-          if (this.installment.payment.course_turn_student) {
-            this.router.navigateByUrl(
-              '/alumnos/pagos/' + this.installment.payment.course_turn_student.id
-            );
-          } else {
-            this.router.navigateByUrl(
-              '/ventas/pagos/' + this.installment.payment.sale!.id
-            );
-          }
-          this.loading = false;
+
+
+
+    this.sharedService.getControlStatus().pipe(
+      switchMap(status => {
+        if(status){
+          return this.studentService.getOperationIsTaken(this.form.get('transaction.operation')!.value).pipe(
+              catchError(_ => {
+                  return of(true);
+              })
+          );
+        }else{
+          return of(false);
         }
-      });
+      }),
+    ).subscribe(isTaken => {
+      if(isTaken){
+        Swal.fire('El número de operación ya existe. No puede continuar con la operación');
+      }else{
+
+        this.tillService
+        .pay(this.installment.id, this.form.value)
+        .subscribe({
+          next: (resp) => {
+            if (!resp.sunat_response) {
+              Swal.fire('Bien Hecho!', `Pago Realizado`, 'success');
+            } else {
+              Swal.fire('Pago Registrado!', `Estado del comprobante: ${resp.sunat_response.SUNAT_CODIGO_RESPUESTA}`, 'success');
+            }
+            if (this.installment.payment.course_turn_student) {
+              this.router.navigateByUrl(
+                '/alumnos/pagos/' + this.installment.payment.course_turn_student.id
+              );
+            } else {
+              this.router.navigateByUrl(
+                '/ventas/pagos/' + this.installment.payment.sale!.id
+              );
+            }
+            this.loading = false;
+          },
+          error: error => {
+            alert(`${error.error.exception}: ${error.error.message}`);
+            if (this.installment.payment.course_turn_student) {
+              this.router.navigateByUrl(
+                '/alumnos/pagos/' + this.installment.payment.course_turn_student.id
+              );
+            } else {
+              this.router.navigateByUrl(
+                '/ventas/pagos/' + this.installment.payment.sale!.id
+              );
+            }
+            this.loading = false;
+          }
+        });
+        
+      }
+    });
   }
 
   isInvalid(field: string) {

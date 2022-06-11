@@ -13,6 +13,8 @@ import { saleTypes } from 'src/app/helpers/sale-types';
 import { btnToggleControlTransactionIsVisible, controlTransactionIsActive, getOperationError, toggleControlTransaction, validateOperation } from 'src/app/helpers/validators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { catchError, map, switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 const voucherUrl = environment.voucherUrl;
 
@@ -60,7 +62,7 @@ export class SaleFormComponent implements OnInit {
       email: [null],
       razon_social: [null],
       bank_id: [null, [Validators.required]],
-      operation: [null, [], [this.validateOperationFunction]],
+      operation: [null, []],
       user_id: [this.authService.getUser().id],
       name: [null, []],
       payment_date: [null, []],
@@ -209,56 +211,77 @@ export class SaleFormComponent implements OnInit {
     } else {
       this.realizarVenta();
     }
-
   }
 
   realizarVenta() {
-    this.loading = true;
-    const data = { ...this.form.value };
-    delete data.student;
-    this.saleService.storeSale(data).subscribe({
-      next: resp => {
-        if (!resp.sunat_response) {
-          Swal.fire({
-            title: 'Bien Hecho!',
-            text: "Pago Realizado",
-            icon: 'success',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'OK',
-            cancelButtonText: 'Imprimir'
-          }).then(r => {
-            if(!(r.isConfirmed)){
-              window.open( `${voucherUrl}/${resp.transaction.voucher}`, '_blank');
-            }
-            this.router.navigate(['ventas', this.saleTypeLabel]);
-          });
-        } else {
-          Swal.fire({
-            title: 'Venta Realizada!',
-            text: `Estado del comprobante: ${resp.sunat_response.SUNAT_CODIGO_RESPUESTA}`,
-            icon: 'success',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'OK',
-            cancelButtonText: 'Imprimir'
-          }).then(r => {
-            if(!(r.isConfirmed)){
-              window.open( `${voucherUrl}/${resp.transaction.voucher}`, '_blank');
-            }
-            this.router.navigate(['ventas', this.saleTypeLabel]);
-          });
+    
+    this.sharedService.getControlStatus().pipe(
+      switchMap(status => {
+        if(status){
+          return this.studentService.getOperationIsTaken(this.form.get('transaction.operation')!.value).pipe(
+              catchError(_ => {
+                  return of(true);
+              })
+          );
+        }else{
+          return of(false);
         }
-        this.loading = false;
-      },
-      error: (error: HttpErrorResponse) => {
-        alert(`${error.error.exception}: ${error.error.message}`);
-        this.router.navigate(['ventas', this.saleTypeLabel]);
-        this.loading = false;
+      }),
+    ).subscribe(isTaken => {
+      if(isTaken){
+        Swal.fire('El número de operación ya existe. No puede continuar con la operación');
+      }else{
+
+        this.loading = true;
+        const data = { ...this.form.value };
+        delete data.student;
+        this.saleService.storeSale(data).subscribe({
+          next: resp => {
+            if (!resp.sunat_response) {
+              Swal.fire({
+                title: 'Bien Hecho!',
+                text: "Pago Realizado",
+                icon: 'success',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK',
+                cancelButtonText: 'Imprimir'
+              }).then(r => {
+                if(!(r.isConfirmed)){
+                  window.open( `${voucherUrl}/${resp.transaction.voucher}`, '_blank');
+                }
+                this.router.navigate(['ventas', this.saleTypeLabel]);
+              });
+            } else {
+              Swal.fire({
+                title: 'Venta Realizada!',
+                text: `Estado del comprobante: ${resp.sunat_response.SUNAT_CODIGO_RESPUESTA}`,
+                icon: 'success',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK',
+                cancelButtonText: 'Imprimir'
+              }).then(r => {
+                if(!(r.isConfirmed)){
+                  window.open( `${voucherUrl}/${resp.transaction.voucher}`, '_blank');
+                }
+                this.router.navigate(['ventas', this.saleTypeLabel]);
+              });
+            }
+            this.loading = false;
+          },
+          error: (error: HttpErrorResponse) => {
+            alert(`${error.error.exception}: ${error.error.message}`);
+            this.router.navigate(['ventas', this.saleTypeLabel]);
+            this.loading = false;
+          }
+        });
+        
       }
     });
+
   }
 
   validateFactura() {
